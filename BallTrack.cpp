@@ -3,10 +3,16 @@
 
 #include "BallTrack.h"
 
-using namespace std;
+#include <glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
-int main()
+int main(int argc, char** argv)
 {
-	cout << "Hello CMake." << endl;
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
+	glutInitWindowSize(480, 320);
+	glutInitWindowPosition(50, 50);
+	glutCreateWindow("Un circuit matérialisé par des anneaux");
 	return 0;
 }
