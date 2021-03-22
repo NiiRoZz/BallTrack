@@ -8,9 +8,11 @@ project ("BallTrack")
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 
-include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
+include_directories( ${OPENGL_INCLUDE_DIRS} )
+include_directories( ${GLUT_INCLUDE_DIRS} )
 
-message(STATUS  ${GLUT_INCLUDE_DIRS})
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 # Add source to this project's executable.
 add_executable (BallTrack "Src/BallTrack.cpp" "Src/BallTrack.h")
