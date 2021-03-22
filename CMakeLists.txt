@@ -19,4 +19,11 @@ add_executable (BallTrack "Src/BallTrack.cpp" "Src/BallTrack.h")
 
 target_link_libraries(BallTrack ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 
+target_include_directories(BallTrack
+  PRIVATE
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${OPENGL_INCLUDE_DIRS}
+    ${GLUT_INCLUDE_DIRS}
+)
+
 # TODO: Add tests and install targets if needed.
