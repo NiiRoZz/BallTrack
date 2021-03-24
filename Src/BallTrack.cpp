@@ -57,10 +57,10 @@ static void display(void)
 {
 	glClearColor(0.5F, 0.5F, 0.5F, 0.5F);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glPolygonMode(GL_FRONT_AND_BACK, (pMode == 1) ? GL_FILL : GL_LINE);
 	scene();
 	glFlush();
 	glutSwapBuffers();
-	glPolygonMode(GL_FRONT_AND_BACK, (pMode == 1) ? GL_FILL : GL_LINE);
 	int error = glGetError();
 	if (error != GL_NO_ERROR)
 		printf("Attention erreur %d\n", error);
