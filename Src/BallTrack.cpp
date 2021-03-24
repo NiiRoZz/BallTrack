@@ -16,6 +16,10 @@ using namespace BallTrack;
 Triangle triangle;
 Triangle triangle2;
 
+
+static int pMode = 1;
+
+
 static void init(void) {
 	const GLfloat shininess[] = { 50.0 };
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
@@ -56,6 +60,7 @@ static void display(void)
 	scene();
 	glFlush();
 	glutSwapBuffers();
+	glPolygonMode(GL_FRONT_AND_BACK, (pMode == 1) ? GL_FILL : GL_LINE);
 	int error = glGetError();
 	if (error != GL_NO_ERROR)
 		printf("Attention erreur %d\n", error);
@@ -81,6 +86,12 @@ static void keyboard(unsigned char key, int x, int y) {
 		glutPositionWindow(px, py);
 	glutReshapeWindow(tx, ty); }
 	break;
+
+	case 'z':
+	{ pMode = !pMode;
+	glutPostRedisplay(); }
+	break;
+
 	}
 }
 int main(int argc, char** argv)
