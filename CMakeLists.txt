@@ -5,6 +5,7 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("BallTrack")
 
+set(OpenGL_GL_PREFERENCE LEGACY)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 
@@ -14,13 +15,28 @@ include_directories( ${GLUT_INCLUDE_DIRS} )
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
+if(NOT MSVC)
+  add_definitions(-Wall -Wextra -g -pedantic)
+endif()
+
 # Add source to this project's executable.
-add_executable (BallTrack "Src/BallTrack.cpp" "Src/BallTrack.h")
+add_executable (BallTrack 
+  Src/BallTrack.cpp
+  Src/Drawables/Triangle.cpp
+  Src/Math/CH3D.cpp
+  Src/Math/Dir3D.cpp
+  Src/Math/Pos3D.cpp
+  Src/Math/Rt3D.cpp
+  Src/Math/Sc3D.cpp
+  Src/Math/TG3D.cpp
+  Src/Math/Tr3D.cpp
+)
 
 target_link_libraries(BallTrack ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 
 target_include_directories(BallTrack
   PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src
     ${CMAKE_CURRENT_BINARY_DIR}
     ${OPENGL_INCLUDE_DIRS}
     ${GLUT_INCLUDE_DIRS}
