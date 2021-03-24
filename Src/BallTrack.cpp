@@ -7,6 +7,10 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include "Drawables/Triangle.h"
+
+BallTrack::Triangle triangle;
+
 static void init(void) {
 	const GLfloat shininess[] = { 50.0 };
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
@@ -20,19 +24,30 @@ static void init(void) {
 	glEnable(GL_AUTO_NORMAL);
 }
 
-static void reshape(int x, int y) {
-	glViewport(0, 0, x, y);
+static void reshape(int wx, int wy) {
+	glViewport(0, 0, wx, wy);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(70.0F, (float)x / y, 1.0, 40.0);
+	double ratio = (double)wx / wy;
+	if (wx > wy)
+		glOrtho(-ratio, ratio, -1.0, 1.0, -1.0, 1.0);
+	else
+		glOrtho(-1.0, 1.0, -1.0 / ratio, 1.0 / ratio, -1.0, 1.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+static void scene(void) {
+	glPushMatrix();
+	triangle.render();
+	glPopMatrix();
 }
 
 static void display(void)
 {
 	glClearColor(0.5F, 0.5F, 0.5F, 0.5F);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	scene();
 	glFlush();
 	glutSwapBuffers();
 	int error = glGetError();

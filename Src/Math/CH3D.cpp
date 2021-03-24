@@ -24,4 +24,16 @@ namespace BallTrack
 
 		return res;
 	}
+
+	CH3D& CH3D::operator*=(const TG3D& rhs)
+	{
+		CH3D temp = *this;
+
+		x = temp.x * rhs.mat[0][0] + temp.y * rhs.mat[0][1] + temp.z * rhs.mat[0][2] + temp.w * rhs.mat[0][3];
+		y = temp.x * rhs.mat[1][0] + temp.y * rhs.mat[1][1] + temp.z * rhs.mat[1][2] + temp.w * rhs.mat[1][3];
+		z = temp.x * rhs.mat[2][0] + temp.y * rhs.mat[2][1] + temp.z * rhs.mat[2][2] + temp.w * rhs.mat[2][3];
+		w = temp.x * rhs.mat[3][0] + temp.y * rhs.mat[3][1] + temp.z * rhs.mat[3][2] + temp.w * rhs.mat[3][3];
+
+		return *this;
+	}
 }

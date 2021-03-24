@@ -11,7 +11,9 @@ namespace BallTrack
 		CH3D(void);
 		CH3D(float xp, float yp, float zp, float wp);
 
-		CH3D operator*(const TG3D& mat);
+		CH3D operator*(const TG3D& rhs);
+		CH3D& operator*=(const TG3D& rhs);
+
 
 	public:
 		float x, y, z;
