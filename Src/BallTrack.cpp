@@ -8,8 +8,13 @@
 #include <GL/glu.h>
 
 #include "Drawables/Triangle.h"
+#include "Math/Sc3D.h"
+#include "Math/Dir3D.h"
 
-BallTrack::Triangle triangle;
+using namespace BallTrack;
+
+Triangle triangle;
+Triangle triangle2;
 
 static void init(void) {
 	const GLfloat shininess[] = { 50.0 };
@@ -40,6 +45,7 @@ static void reshape(int wx, int wy) {
 static void scene(void) {
 	glPushMatrix();
 	triangle.render();
+	triangle2.render();
 	glPopMatrix();
 }
 
@@ -89,6 +95,12 @@ int main(int argc, char** argv)
 	glutReshapeFunc(reshape);
 	//glutSpecialFunc(special);
 	glutDisplayFunc(display);
+
+	triangle.setRotation(Rt3D(1.57f, Dir3D(0.f, 0.f, 1.f)));
+	triangle.setScale(Sc3D(1.f));
+
+	triangle2.setScale(Sc3D(1.f));
+
 	glutMainLoop();
 	return 0;
 }

@@ -10,6 +10,7 @@ namespace BallTrack
 	class Rt3D : public TG3D
 	{
 	public:
+		Rt3D(void);
 		Rt3D(float angle, const Dir3D& dir);
 	};
 }

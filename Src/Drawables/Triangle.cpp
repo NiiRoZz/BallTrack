@@ -12,6 +12,7 @@
 namespace BallTrack
 {
     Triangle::Triangle(void)
+    : Drawable()
     {
         m_Vertices[0] = Pos3D(0.f, 0.f, 0.f);
         m_Vertices[1] = Pos3D(1.f, 0.f, 0.f);
@@ -20,12 +21,11 @@ namespace BallTrack
 
     void Triangle::render()
     {
-        std::cout << "Triangle" << std::endl;
         glBegin(GL_TRIANGLES);
-        for (const Pos3D& pos: m_Vertices)
+        for (Pos3D& pos: m_Vertices)
         {
-            std::cout << "Pos : " << pos.x << " " << pos.y << " " << pos.z << std::endl;
-            glVertex3f(pos.x, pos.y, pos.z);
+            CH3D newPos = ((pos * m_Rotation) * m_Translation) * m_Scale;
+            glVertex3f(newPos.x, newPos.y, newPos.z);
         }
         glEnd();
     }

@@ -3,6 +3,12 @@
 
 namespace BallTrack
 {
+	Tr3D::Tr3D(void)
+	: Tr3D(0.f, 0.f, 0.f)
+	{
+
+	}
+
 	Tr3D::Tr3D(float tx, float ty, float tz)
 	: TG3D()
 	{

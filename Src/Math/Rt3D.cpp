@@ -6,6 +6,11 @@
 
 namespace BallTrack
 {
+	Rt3D::Rt3D(void)
+	: Rt3D(0.f, Dir3D(0.f, 0.f, 0.f))
+	{
+	}
+
 	Rt3D::Rt3D(float angle, const Dir3D& dir)
 	: TG3D()
 	{

@@ -10,6 +10,7 @@ namespace BallTrack
 	class Tr3D : public TG3D
 	{
 	public:
+		Tr3D(void);
 		Tr3D(float tx, float ty, float tz);
 		Tr3D(const Dir3D& dir);
 	};

@@ -8,6 +8,8 @@ namespace BallTrack
 	class Sc3D : public TG3D
 	{
 	public:
+		Sc3D(void);
+		Sc3D(float s);
 		Sc3D(float sx, float sy, float sz);
 	};
 }

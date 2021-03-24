@@ -22,6 +22,7 @@ endif()
 # Add source to this project's executable.
 add_executable (BallTrack 
   Src/BallTrack.cpp
+  Src/Drawables/Drawable.cpp
   Src/Drawables/Triangle.cpp
   Src/Math/CH3D.cpp
   Src/Math/Dir3D.cpp

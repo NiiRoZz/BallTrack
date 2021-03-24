@@ -2,6 +2,16 @@
 
 namespace BallTrack
 {
+	Sc3D::Sc3D(void)
+	: Sc3D(1.0F)
+	{
+	}
+
+	Sc3D::Sc3D(float s)
+	: Sc3D(s, s, s)
+	{
+	}
+
 	Sc3D::Sc3D(float sx, float sy, float sz)
 	: TG3D()
 	{
