@@ -6,7 +6,7 @@
 
 namespace BallTrack
 {
-    static std::vector<Model3D> ObjLoader::loadObjFile(std::string path)
+    std::vector<Model3D> ObjLoader::loadObjFile(std::string path)
     {
         std::vector<Model3D> models;
 
