@@ -4,25 +4,19 @@
 
 namespace BallTrack
 {
-    Model3D::Model3D(void)
-    : m_Valid(false)
+    Model3D::Model3D(const std::vector<Triangle>& triangles)
+    : m_Triangles(triangles)
     {
     }
-
-    Model3D::Model3D(std::vector<Triangle>& triangles)
-    : m_Valid(true)
-    , m_Triangles(triangles)
+    
+    void Model3D::setTriangles(const std::vector<Triangle>& triangles)
     {
-    }
-
-    bool Model3D::isValid(void) const
-    {
-        return m_Valid;
+        m_Triangles = triangles;
     }
 
     void Model3D::render(const TG3D& parentMat)
     {
-        if (!isValid()) return;
+        if (m_Triangles.size() <= 0) return;
 
         TG3D modelMatrix = parentMat * getModelMatrix();
 

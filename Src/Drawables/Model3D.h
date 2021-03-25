@@ -11,15 +11,14 @@ namespace BallTrack
     class Model3D: public Drawable
     {
     public:
-        Model3D(void);
-        Model3D(std::vector<Triangle>& triangles);
+        Model3D(void) = default;
+        Model3D(const std::vector<Triangle>& triangles);
 
-        bool isValid(void) const;
+        void setTriangles(const std::vector<Triangle>& triangles);
 
         virtual void render(const TG3D& parentMat = TG3D()) override;
 
     private:
-        bool m_Valid;
         std::vector<Triangle> m_Triangles;
     };
 }
