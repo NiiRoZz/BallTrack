@@ -2,7 +2,7 @@
 #define _BALLTRACK_OBJLOADER_H
 
 #include <vector>
-
+#include <string>
 #include "Drawables/Model3D.h"
 
 namespace BallTrack
