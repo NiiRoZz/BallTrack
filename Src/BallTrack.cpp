@@ -65,33 +65,41 @@ static void display(void)
 	if (error != GL_NO_ERROR)
 		printf("Attention erreur %d\n", error);
 }
-static void keyboard(unsigned char key, int x, int y) {
-	switch (key) {
-	case 'f':
-	case 'F':
-	{ static int fullScreen = 0;
-	static int tx;
-	static int ty;
-	static int px;
-	static int py;
-	fullScreen = !fullScreen;
-	if (fullScreen) {
-		px = glutGet(GLUT_WINDOW_X);
-		py = glutGet(GLUT_WINDOW_Y);
-		tx = glutGet(GLUT_WINDOW_WIDTH);
-		ty = glutGet(GLUT_WINDOW_HEIGHT);
-		glutFullScreen();
-	}
-	else
-		glutPositionWindow(px, py);
-	glutReshapeWindow(tx, ty); }
-	break;
+static void keyboard(unsigned char key, int , int )
+{
+	switch (key)
+	{
+		case 'f':
+		case 'F':
+		{
+			static int fullScreen = 0;
+			static int tx;
+			static int ty;
+			static int px;
+			static int py;
+			fullScreen = !fullScreen;
+			if (fullScreen)
+			{
+				px = glutGet(GLUT_WINDOW_X);
+				py = glutGet(GLUT_WINDOW_Y);
+				tx = glutGet(GLUT_WINDOW_WIDTH);
+				ty = glutGet(GLUT_WINDOW_HEIGHT);
+				glutFullScreen();
+			}
+			else
+			{
+				glutPositionWindow(px, py);
+				glutReshapeWindow(tx, ty);
+			}
+		}
+		break;
 
-	case 'z':
-	{ pMode = !pMode;
-	glutPostRedisplay(); }
-	break;
-
+		case 'z':
+		{ 
+			pMode = !pMode;
+			glutPostRedisplay();
+		}
+		break;
 	}
 }
 int main(int argc, char** argv)

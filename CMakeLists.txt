@@ -16,7 +16,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 if(NOT MSVC)
-  add_definitions(-Wall -Wextra -g -pedantic)
+  add_definitions(-Wall -Wextra -Werror -g -pedantic)
 endif()
 
 # Add source to this project's executable.
@@ -31,6 +31,7 @@ add_executable (BallTrack
   Src/Math/Sc3D.cpp
   Src/Math/TG3D.cpp
   Src/Math/Tr3D.cpp
+  Src/Math/Vector2.cpp
 )
 
 target_link_libraries(BallTrack ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})

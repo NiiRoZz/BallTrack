@@ -14,53 +14,26 @@ namespace BallTrack
     Triangle::Triangle(void)
     : Drawable()
     {
-        m_Vertices[0] = Pos3D(0.f, 0.f, 0.f);
-        m_Vertices[1] = Pos3D(1.f, 0.f, 0.f);
-        m_Vertices[2] = Pos3D(0.f, 1.f, 0.f);
+        m_Vertices[0] = Vertex {Pos3D(0.f, 0.f, 0.f), Dir3D(), Vector2()};
+        m_Vertices[1] = Vertex {Pos3D(1.f, 0.f, 0.f), Dir3D(), Vector2()};
+        m_Vertices[2] = Vertex {Pos3D(0.f, 1.f, 0.f), Dir3D(), Vector2()};
     }
 
     void Triangle::render()
     {
         glBegin(GL_TRIANGLES);
-        for (Pos3D& pos: m_Vertices)
+        for (Vertex& vertex: m_Vertices)
         {
-            CH3D newPos = ((pos * m_Rotation) * m_Translation) * m_Scale;
+            CH3D newPos = ((vertex.position * m_Rotation) * m_Translation) * m_Scale;
+
+            glTexCoord2f(vertex.uv.x, vertex.uv.y);
+            glNormal3f(vertex.normal.x, vertex.normal.y, vertex.normal.z);
             glVertex3f(newPos.x, newPos.y, newPos.z);
         }
         glEnd();
     }
 
-    Triangle& Triangle::operator*(const Sc3D& scale)
-    {
-        for (Pos3D& pos: m_Vertices)
-        {
-            pos *= scale;
-        }
-        
-        return *this;
-    }
-
-    Triangle& Triangle::operator*(const Rt3D& rotation)
-    {
-        for (Pos3D& pos: m_Vertices)
-        {
-            pos *= rotation;
-        }
-
-        return *this;
-    }
-
-    Triangle& Triangle::operator*(const Tr3D& translation)
-    {
-        for (Pos3D& pos: m_Vertices)
-        {
-            pos *= translation;
-        }
-
-        return *this;
-    }
-
-    const std::array<Pos3D, 3>& Triangle::getVertices()
+    const std::array<Vertex, 3>& Triangle::getVertices()
     {
         return m_Vertices;
     }
