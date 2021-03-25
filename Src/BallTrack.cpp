@@ -22,7 +22,12 @@ Model3D model3D;
 float scale = 1.f;
 
 bool pMode = true;
-
+static int mouseActive = 0;
+static int mouseX = 0;
+static float rx = 0.0F;            
+static float sens = 1.0F;          
+static float ry = 0.0F;           
+static float rz = 0.0F;
 
 static void init(void) {
 	const GLfloat shininess[] = { 50.0 };
@@ -54,6 +59,7 @@ static void scene(void) {
 	glPushMatrix();
 	std::cout << "scale : " << scale << std::endl;
 	model3D.setScale(Sc3D(scale));
+	
 	model3D.render();
 	glPopMatrix();
 }
@@ -63,6 +69,9 @@ static void display(void)
 	glClearColor(0.5F, 0.5F, 0.5F, 0.5F);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPolygonMode(GL_FRONT_AND_BACK, (pMode == true) ? GL_FILL : GL_LINE);
+	glRotatef(rz, 0.0F, 0.0F, 1.0F);
+	glRotatef(rx, 1.0F, 0.0F, 0.0F);
+	glRotatef(ry, 0.0F, 1.0F, 0.0F);
 	scene();
 	glFlush();
 	glutSwapBuffers();
@@ -121,6 +130,43 @@ static void keyboard(unsigned char key, int , int )
 		break;
 	}
 }
+
+
+static void special(int specialKey, int x, int y) {
+	switch (specialKey) {
+	case GLUT_KEY_RIGHT:
+		ry += 1.0F;
+		glutPostRedisplay();
+		break;
+	case GLUT_KEY_LEFT:
+		ry -= 1.0F;
+		glutPostRedisplay();
+		break;
+	}
+}
+
+static void mouse(int button, int state, int x, int y) {
+	if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_DOWN)) {
+		mouseX = x;
+		mouseActive = 1;
+	}
+	if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_UP)) {
+		mouseActive = 0;
+	}
+	if ((button == GLUT_RIGHT_BUTTON) && (state == GLUT_UP))
+		sens *= -1.0F;
+}
+
+
+static void mouseMotion(int x, int y) {
+	if (mouseActive) {
+		rz += (mouseX - x);
+		mouseX = x;
+		glutPostRedisplay();
+	}
+}
+
+
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
@@ -130,6 +176,9 @@ int main(int argc, char** argv)
 	glutCreateWindow("BallTrack");
 	init();
 	glutKeyboardFunc(keyboard);
+	glutSpecialFunc(special);
+	glutMouseFunc(mouse);
+	glutMotionFunc(mouseMotion);
 	glutReshapeFunc(reshape);
 	//glutSpecialFunc(special);
 	glutDisplayFunc(display);
