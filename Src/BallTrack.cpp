@@ -189,7 +189,7 @@ int main(int argc, char** argv)
 	model3D = Model3D(triangles);
 
 	ObjLoader loader;
-	loader.loadObjFile("models/untitled.obj");
+	loader.loadObjFile("models/", "untitled");
 
 	glutMainLoop();
 	return 0;
