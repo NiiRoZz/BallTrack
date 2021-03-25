@@ -11,6 +11,7 @@
 #include "Drawables/Model3D.h"
 #include "Math/Sc3D.h"
 #include "Math/Dir3D.h"
+#include "Utils/ObjLoader.h"
 
 using namespace BallTrack;
 
@@ -140,6 +141,9 @@ int main(int argc, char** argv)
 
 	std::vector<Triangle> triangles({triangle, triangle2});
 	model3D = Model3D(triangles);
+
+	ObjLoader loader;
+	loader.loadObjFile("models/untitled.obj");
 
 	glutMainLoop();
 	return 0;
