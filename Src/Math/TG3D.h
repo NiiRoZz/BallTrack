@@ -13,8 +13,8 @@ namespace BallTrack
 		template<typename T>
 		T operator*(const T& rhs) const // Compose this et rhs (this.rhs) et retourne le resultat 
 		{
-			static_assert(std::is_base_of<TG3D, T>::value);
-			
+			static_assert(std::is_base_of<TG3D, T>::value, "The template operator* should use a child class per default, specialize it, if you need to use it with another class");
+
 			T res;
 
 			for (int l = 0; l < 4; ++l)
