@@ -8,7 +8,7 @@ namespace BallTrack
     }
 
     Pos3D::Pos3D(float xp, float yp, float zp)
-    : CH3D(xp, yp, zp, 1.0F)
+    : CH3D(xp, yp, zp, 1.0f)
     {
     }
 }

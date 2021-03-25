@@ -7,12 +7,12 @@
 namespace BallTrack
 {
 	Dir3D::Dir3D(void)
-	: CH3D(0.0F, 0.0F, 1.0F, 0.0F)
+	: CH3D(0.0f, 0.0f, 1.0f, 0.0f)
 	{
 	}
 
 	Dir3D::Dir3D(float xp, float yp, float zp)
-	: CH3D(xp, yp, zp, 0.0F)
+	: CH3D(xp, yp, zp, 0.0f)
 	{
 	}
 
@@ -32,7 +32,7 @@ namespace BallTrack
 
 		Dir3D res;
 
-		if (norm != 0.0F)
+		if (norm != 0.0f)
 		{
 			res.x = x / norm;
 			res.y = y / norm;

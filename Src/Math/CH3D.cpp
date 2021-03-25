@@ -4,7 +4,7 @@
 namespace BallTrack
 {
 	CH3D::CH3D(void)
-	: x(0.0F), y(0.0F), z(0.0F), w(1.0F)
+	: x(0.0f), y(0.0f), z(0.0f), w(1.0f)
 	{
 	}
 

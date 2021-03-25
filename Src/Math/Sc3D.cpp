@@ -3,7 +3,7 @@
 namespace BallTrack
 {
 	Sc3D::Sc3D(void)
-	: Sc3D(1.0F)
+	: Sc3D(1.0f)
 	{
 	}
 
