@@ -19,12 +19,13 @@ namespace BallTrack
         m_Vertices[2] = Vertex {Pos3D(0.f, 1.f, 0.f), Dir3D(), Vector2()};
     }
 
-    void Triangle::render()
+    void Triangle::render(const TG3D& parentMat)
     {
         glBegin(GL_TRIANGLES);
         for (Vertex& vertex: m_Vertices)
         {
-            CH3D newPos = ((vertex.position * m_Rotation) * m_Translation) * m_Scale;
+            TG3D matrix = parentMat * getModelMatrix();
+            CH3D newPos = vertex.position * matrix;
 
             glTexCoord2f(vertex.uv.x, vertex.uv.y);
             glNormal3f(vertex.normal.x, vertex.normal.y, vertex.normal.z);

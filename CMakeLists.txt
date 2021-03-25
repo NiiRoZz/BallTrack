@@ -24,6 +24,7 @@ add_executable (BallTrack
   Src/BallTrack.cpp
   Src/Drawables/Drawable.cpp
   Src/Drawables/Triangle.cpp
+  Src/Drawables/Model3D.cpp
   Src/Math/CH3D.cpp
   Src/Math/Dir3D.cpp
   Src/Math/Pos3D.cpp

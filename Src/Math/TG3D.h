@@ -8,7 +8,7 @@ namespace BallTrack
 	public:
 		TG3D(void);
 
-		TG3D operator*(const TG3D& rhs);    // Compose this et rhs (this.rhs) et retourne le resultat 
+		TG3D operator*(const TG3D& rhs) const;    // Compose this et rhs (this.rhs) et retourne le resultat 
 
 	public:
 		float mat[4][4];

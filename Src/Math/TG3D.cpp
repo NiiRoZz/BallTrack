@@ -13,7 +13,7 @@ namespace BallTrack
 		}
 	}
 
-	TG3D TG3D::operator*(const TG3D& rhs)
+	TG3D TG3D::operator*(const TG3D& rhs) const
 	{
 		TG3D res;
 

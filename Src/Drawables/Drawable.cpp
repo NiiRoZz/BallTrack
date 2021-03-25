@@ -31,4 +31,9 @@ namespace BallTrack
     {
         m_Translation = translation;
     }
+
+    TG3D Drawable::getModelMatrix(void) const
+    {
+        return m_Translation * m_Rotation * m_Scale;
+    }
 }

@@ -8,6 +8,7 @@
 #include <GL/glu.h>
 
 #include "Drawables/Triangle.h"
+#include "Drawables/Model3D.h"
 #include "Math/Sc3D.h"
 #include "Math/Dir3D.h"
 
@@ -15,7 +16,9 @@ using namespace BallTrack;
 
 Triangle triangle;
 Triangle triangle2;
+Model3D model3D;
 
+float scale = 1.f;
 
 bool pMode = true;
 
@@ -48,8 +51,9 @@ static void reshape(int wx, int wy) {
 
 static void scene(void) {
 	glPushMatrix();
-	triangle.render();
-	triangle2.render();
+	std::cout << "scale : " << scale << std::endl;
+	model3D.setScale(Sc3D(scale));
+	model3D.render();
 	glPopMatrix();
 }
 
@@ -100,6 +104,20 @@ static void keyboard(unsigned char key, int , int )
 			glutPostRedisplay();
 		}
 		break;
+
+		case 'o':
+		{
+			scale -= 0.1f;
+			glutPostRedisplay();
+		}
+		break;
+
+		case 'p':
+		{
+			scale += 0.1f;
+			glutPostRedisplay();
+		}
+		break;
 	}
 }
 int main(int argc, char** argv)
@@ -119,6 +137,9 @@ int main(int argc, char** argv)
 	triangle.setScale(Sc3D(1.f));
 
 	triangle2.setScale(Sc3D(1.f));
+
+	std::vector<Triangle> triangles({triangle, triangle2});
+	model3D = Model3D(triangles);
 
 	glutMainLoop();
 	return 0;

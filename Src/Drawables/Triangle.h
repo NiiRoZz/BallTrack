@@ -1,5 +1,5 @@
-#ifndef _TRIANGLE_H
-#define _TRIANGLE_H
+#ifndef _BALLTRACK_TRIANGLE_H
+#define _BALLTRACK_TRIANGLE_H
 
 #include <array>
 
@@ -17,7 +17,7 @@ namespace BallTrack
     public:
         Triangle(void);
         
-        virtual void render() override;
+        virtual void render(const TG3D& parentMat = TG3D()) override;
 
         const std::array<Vertex, 3>& getVertices();
 
@@ -26,4 +26,4 @@ namespace BallTrack
     };
 }
 
-#endif //_TRIANGLE_H
+#endif //_BALLTRACK_TRIANGLE_H
