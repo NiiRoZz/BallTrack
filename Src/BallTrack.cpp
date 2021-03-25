@@ -24,7 +24,7 @@ float scale = 1.f;
 bool pMode = true;
 
 static float rx = 0.0F;            
-static float sens = 1.0F;          
+//static float sens = 1.0F;          
 static float ry = 0.0F;           
 static float rz = 0.0F;
 
@@ -65,11 +65,8 @@ static void scene(void) {
 	std::cout << "rz : " << rz << std::endl;
 
 
-	//Rt3D rot =reinterpret_cast<Rt3D>( Rt3D(ry, Dir3D(0.0f, 1.0f, 0.f)) * Rt3D(rx, Dir3D(1.0f, 0.0f, 0.f)));
-
-	model3D.setRotation(Rt3D(rx, Dir3D(1.0f, 0.0f, 0.f)));
-	//model3D.setRotation(Rt3D(ry, Dir3D(0.0f, 1.0f, 0.f)));
-	//model3D.setRotation(Rt3D(rz, Dir3D(0.0f, 0.0f, 1.0f)));
+	Rt3D rot = Rt3D(ry, Dir3D(0.0f, 1.0f, 0.f)) * Rt3D(rx, Dir3D(1.0f, 0.0f, 0.f)) * Rt3D(rz, Dir3D(0.0f, 0.0f, 1.f));
+	model3D.setRotation(rot);
 
 
 	model3D.render();
@@ -142,7 +139,7 @@ static void keyboard(unsigned char key, int , int )
 }
 
 
-static void special(int specialKey, int x, int y) {
+static void special(int specialKey, int , int ) {
 	switch (specialKey) {
 	case GLUT_KEY_RIGHT:
 		ry += 0.1F;
