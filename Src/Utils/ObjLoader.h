@@ -19,6 +19,13 @@ namespace BallTrack
          * @param fileName file name without the .obj format at the end
          */
         std::vector<Model3D> loadObjFile(const std::string& path, const std::string& fileName);
+
+    private:
+        std::vector<std::string> split(const std::string& s, const std::string& delimiter);
+
+        void ltrim(std::string& str, const std::string& chars = "\t\n\v\f\r ");
+        void rtrim(std::string& str, const std::string& chars = "\t\n\v\f\r ");
+        void trim(std::string& str, const std::string& chars = "\t\n\v\f\r ");
     };
 }
 

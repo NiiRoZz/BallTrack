@@ -2,6 +2,7 @@
 #define _BALLTRACK_TRIANGLE_H
 
 #include <array>
+#include <vector>
 
 #include "Drawable.h"
 #include "Vertex.h"
@@ -16,6 +17,7 @@ namespace BallTrack
     {
     public:
         Triangle(void);
+        Triangle(const std::vector<Vertex>& vertices);
         
         virtual void render(const TG3D& parentMat = TG3D()) override;
 

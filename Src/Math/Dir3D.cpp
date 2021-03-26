@@ -21,6 +21,11 @@ namespace BallTrack
 	{
 	}
 
+	Dir3D::Dir3D(const CH3D& ch)
+    : CH3D(ch.x, ch.y, ch.z, 0.0f)
+    {
+    }
+
 	float Dir3D::norme(void) const
 	{
 		return sqrtf(x * x + y * y + z * z);
@@ -42,12 +47,17 @@ namespace BallTrack
 		return res;
 	}
 
-	float Dir3D::operator*(const Dir3D& dir)
+	float Dir3D::operator*(const Dir3D& dir) const
 	{
 		return this->x * dir.x + this->y * dir.y + this->z * dir.z;
 	}
 
-	Dir3D Dir3D::operator^(const Dir3D& dir) // produit vectoriel entre this et dir 
+	Dir3D Dir3D::operator*(const float distance) const
+	{
+		return Dir3D(x * distance, y * distance, z * distance);
+	}
+
+	Dir3D Dir3D::operator^(const Dir3D& dir) const // produit vectoriel entre this et dir 
 	{
 		Dir3D res;
 
@@ -56,5 +66,10 @@ namespace BallTrack
 		res.z = this->x * dir.y - dir.x * this->y;
 
 		return res;
+	}
+
+	Dir3D Dir3D::operator*(const TG3D& rhs) const
+	{
+		return CH3D::operator*(rhs);
 	}
 }

@@ -31,7 +31,10 @@ namespace BallTrack
 			}
 
 			return res;
-		}    
+		}
+
+		TG3D transpose(void) const;
+		TG3D invert(void) const;
 
 	public:
 		float mat[4][4];

@@ -14,24 +14,58 @@ namespace BallTrack
     Triangle::Triangle(void)
     : Drawable()
     {
-        m_Vertices[0] = Vertex {Pos3D(0.f, 0.f, 0.f), Dir3D(), Vector2()};
-        m_Vertices[1] = Vertex {Pos3D(1.f, 0.f, 0.f), Dir3D(), Vector2()};
-        m_Vertices[2] = Vertex {Pos3D(0.f, 1.f, 0.f), Dir3D(), Vector2()};
+
+    }
+
+    Triangle::Triangle(const std::vector<Vertex>& vertices)
+    : Drawable()
+    {
+        std::size_t min = std::min(m_Vertices.size(), vertices.size());
+
+        for (std::size_t i = 0; i < min; ++i)
+        {
+            m_Vertices[i] = vertices[i];
+        }
     }
 
     void Triangle::render(const TG3D& parentMat)
     {
+        const TG3D matrix = parentMat * getModelMatrix();
+        const TG3D normalMatrix = matrix.transpose().invert();
+
         glBegin(GL_TRIANGLES);
-        for (Vertex& vertex: m_Vertices)
+        for (const Vertex& vertex: m_Vertices)
         {
-            TG3D matrix = parentMat * getModelMatrix();
             CH3D newPos = vertex.position * matrix;
+            Dir3D newNormal = vertex.normal * normalMatrix;
+            newNormal = newNormal.normalize();
+
+            //std::cout << "normal.x : " << vertex.normal.x << " normal.y : " << vertex.normal.y << " normal.z : " << vertex.normal.z << std::endl;
 
             glTexCoord2f(vertex.uv.x, vertex.uv.y);
-            glNormal3f(vertex.normal.x, vertex.normal.y, vertex.normal.z);
+            glNormal3f(newNormal.x, newNormal.y, newNormal.z);
             glVertex3f(newPos.x, newPos.y, newPos.z);
         }
         glEnd();
+
+        glBegin(GL_LINES);
+        for (const Vertex& vertex: m_Vertices)
+        {
+            CH3D newPos = vertex.position * matrix;
+            Dir3D newNormal = vertex.normal * normalMatrix;
+            newNormal = newNormal.normalize();
+
+            Pos3D nextPoint = Pos3D(newNormal * 0.5f) + newPos;
+
+            //std::cout << "nextPoint.x : " << nextPoint.x << " nextPoint.y : " << nextPoint.y << " nextPoint.z : " << nextPoint.z << std::endl;
+
+            //glColor3f(1.f, 0.f, 0.f);
+            glVertex3f(newPos.x, newPos.y, newPos.z);
+            glVertex3f(nextPoint.x, nextPoint.y, nextPoint.z);
+        }
+        glEnd();
+
+        //std::cout << std::endl;
     }
 
     const std::array<Vertex, 3>& Triangle::getVertices()

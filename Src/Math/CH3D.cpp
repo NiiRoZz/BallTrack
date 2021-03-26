@@ -13,7 +13,7 @@ namespace BallTrack
 	{
 	}
 
-	CH3D CH3D::operator*(const TG3D& mat)
+	CH3D CH3D::operator*(const TG3D& mat) const
 	{
 		CH3D res;
 
@@ -23,6 +23,11 @@ namespace BallTrack
 		res.w = this->x * mat.mat[3][0] + this->y * mat.mat[3][1] + this->z * mat.mat[3][2] + this->w * mat.mat[3][3];
 
 		return res;
+	}
+
+	CH3D CH3D::operator*(const float size) const
+	{
+		return CH3D(x * size, y * size, z * size, w);
 	}
 
 	CH3D& CH3D::operator*=(const TG3D& rhs)

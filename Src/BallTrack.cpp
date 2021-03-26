@@ -11,13 +11,12 @@
 #include "Drawables/Model3D.h"
 #include "Math/Sc3D.h"
 #include "Math/Dir3D.h"
+#include "Math/TG3D.h"
 #include "Utils/ObjLoader.h"
 
 using namespace BallTrack;
 
-Triangle triangle;
-Triangle triangle2;
-Model3D model3D;
+std::vector<Model3D> allModels;
 
 float scale = 1.f;
 
@@ -38,7 +37,6 @@ static void init(void) {
 	glDepthFunc(GL_LESS);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_NORMALIZE);
-	glEnable(GL_AUTO_NORMAL);
 }
 
 static void reshape(int wx, int wy) {
@@ -47,29 +45,30 @@ static void reshape(int wx, int wy) {
 	glLoadIdentity();
 	double ratio = (double)wx / wy;
 	if (wx > wy)
-		glOrtho(-ratio, ratio, -1.0, 1.0, -1.0, 1.0);
+		glOrtho(-ratio, ratio, -1.0, 1.0, -50000, 50000);
 	else
-		glOrtho(-1.0, 1.0, -1.0 / ratio, 1.0 / ratio, -1.0, 1.0);
+		glOrtho(-1.0, 1.0, -1.0 / ratio, 1.0 / ratio, -50000, 50000);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
 
 static void scene(void) {
 	glPushMatrix();
+
 	std::cout << "scale : " << scale << std::endl;
-	model3D.setScale(Sc3D(scale));
-
-
 	std::cout << "rx : " << rx << std::endl;
 	std::cout << "ry : " << ry << std::endl;
 	std::cout << "rz : " << rz << std::endl;
 
-
 	Rt3D rot = Rt3D(ry, Dir3D(0.0f, 1.0f, 0.f)) * Rt3D(rx, Dir3D(1.0f, 0.0f, 0.f)) * Rt3D(rz, Dir3D(0.0f, 0.0f, 1.f));
-	model3D.setRotation(rot);
 
+	for (Model3D& model : allModels)
+	{
+		model.setScale(Sc3D(scale));
+		model.setRotation(rot);
+		model.render();
+	}
 
-	model3D.render();
 	glPopMatrix();
 }
 
@@ -150,11 +149,11 @@ static void special(int specialKey, int , int ) {
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_UP:
-		 rx += 0.1F;
-		 glutPostRedisplay();
-		 break;
-	case GLUT_KEY_DOWN:
 		rx += 0.1F;
+		glutPostRedisplay();
+		break;
+	case GLUT_KEY_DOWN:
+		rx -= 0.1F;
 		glutPostRedisplay();
 		break;
 	}
@@ -172,21 +171,13 @@ int main(int argc, char** argv)
 	init();
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(special);
-
 	glutReshapeFunc(reshape);
-	//glutSpecialFunc(special);
 	glutDisplayFunc(display);
 
-	triangle.setRotation(Rt3D(1.57f, Dir3D(0.f, 0.f, 1.f)));
-	triangle.setScale(Sc3D(1.f));
-
-	triangle2.setScale(Sc3D(1.f));
-
-	std::vector<Triangle> triangles({triangle, triangle2});
-	model3D = Model3D(triangles);
-
 	ObjLoader loader;
-	loader.loadObjFile("models/", "untitled");
+	allModels = loader.loadObjFile("../models/", "untitled");
+
+	std::cout << "nmb models : " << allModels.size() << std::endl;
 
 	glutMainLoop();
 	return 0;
