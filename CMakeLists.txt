@@ -33,6 +33,7 @@ add_executable (BallTrack
   Src/Math/TG3D.cpp
   Src/Math/Tr3D.cpp
   Src/Math/Vector2.cpp
+  Src/Math/Vector3.cpp
   Src/Utils/ObjLoader.cpp
 )
 
