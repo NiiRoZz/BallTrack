@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <cstring>
 
 namespace BallTrack
 {
@@ -15,7 +16,11 @@ namespace BallTrack
         std::ifstream fs;
         fs.open(objPath);
 
-        if (!fs.is_open()) return models;
+        if (!fs.is_open())
+        {
+            std::cerr << "error : " << std::strerror(errno) << std::endl;
+            return models;
+        }
 
         std::cout << "opened " << objPath << std::endl;
 
