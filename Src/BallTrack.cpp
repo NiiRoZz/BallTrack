@@ -7,6 +7,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include <memory>
+
 #include "Drawables/Triangle.h"
 #include "Drawables/Model3D.h"
 #include "Math/Sc3D.h"
@@ -17,7 +19,7 @@
 
 using namespace BallTrack;
 
-std::vector<Entity> allEntities;
+std::vector<std::unique_ptr<Entity>> allEntities;
 
 float scale = 1.f;
 
@@ -63,11 +65,11 @@ static void scene(void) {
 
 	Rt3D rot = Rt3D(ry, Dir3D(0.0f, 1.0f, 0.f)) * Rt3D(rx, Dir3D(1.0f, 0.0f, 0.f)) * Rt3D(rz, Dir3D(0.0f, 0.0f, 1.f));
 
-	for (Entity& entity : allEntities)
+	for (auto& entity : allEntities)
 	{
-		entity.setScale(Sc3D(scale));
-		entity.setRotation(rot);
-		entity.render();
+		entity->setScale(Sc3D(scale));
+		entity->setRotation(rot);
+		entity->render();
 	}
 
 	glPopMatrix();
@@ -182,7 +184,7 @@ int main(int argc, char** argv)
 
 	if (allModels.size() > 0)
 	{
-		allEntities.emplace_back(allModels[0]);
+		allEntities.push_back(std::make_unique<CircleEntity>(allModels[0]));
 	}
 
 	glutMainLoop();
