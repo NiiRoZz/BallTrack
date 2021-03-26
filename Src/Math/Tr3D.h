@@ -6,6 +6,7 @@
 namespace BallTrack
 {
 	class Dir3D;
+	class Pos3D;
 
 	class Tr3D : public TG3D
 	{
@@ -13,6 +14,7 @@ namespace BallTrack
 		Tr3D(void);
 		Tr3D(float tx, float ty, float tz);
 		Tr3D(const Dir3D& dir);
+		Tr3D(const Pos3D& pos);
 	};
 }
 

@@ -30,13 +30,12 @@ namespace BallTrack
 
     void Triangle::render(const TG3D& parentMat)
     {
-        const TG3D matrix = parentMat * getModelMatrix();
-        const TG3D normalMatrix = matrix.transpose().invert();
+        const TG3D normalMatrix = parentMat.transpose().invert();
 
         glBegin(GL_TRIANGLES);
         for (const Vertex& vertex: m_Vertices)
         {
-            CH3D newPos = vertex.position * matrix;
+            CH3D newPos = vertex.position * parentMat;
             Dir3D newNormal = vertex.normal * normalMatrix;
             newNormal = newNormal.normalize();
 
@@ -51,7 +50,7 @@ namespace BallTrack
         glBegin(GL_LINES);
         for (const Vertex& vertex: m_Vertices)
         {
-            CH3D newPos = vertex.position * matrix;
+            CH3D newPos = vertex.position * parentMat;
             Dir3D newNormal = vertex.normal * normalMatrix;
             newNormal = newNormal.normalize();
 

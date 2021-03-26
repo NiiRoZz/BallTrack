@@ -15,10 +15,11 @@ namespace BallTrack
         Model3D(const std::vector<Triangle>& triangles);
 
         void setTriangles(const std::vector<Triangle>& triangles);
+        const std::vector<Triangle>& getTriangles() const;
 
         virtual void render(const TG3D& parentMat = TG3D()) override;
 
-    private:
+    protected:
         std::vector<Triangle> m_Triangles;
     };
 }

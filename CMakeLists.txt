@@ -22,7 +22,6 @@ endif()
 # Add source to this project's executable.
 add_executable (BallTrack 
   Src/BallTrack.cpp
-  Src/Drawables/Drawable.cpp
   Src/Drawables/Triangle.cpp
   Src/Drawables/Model3D.cpp
   Src/Math/CH3D.cpp
@@ -35,6 +34,9 @@ add_executable (BallTrack
   Src/Math/Vector2.cpp
   Src/Math/Vector3.cpp
   Src/Utils/ObjLoader.cpp
+  Src/Physics/PhysicEntity.cpp
+  Src/Entities/Entity.cpp
+  Src/Entities/CircleEntity.cpp
 )
 
 target_link_libraries(BallTrack ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})

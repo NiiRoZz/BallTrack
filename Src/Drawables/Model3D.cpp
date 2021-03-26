@@ -14,15 +14,18 @@ namespace BallTrack
         m_Triangles = triangles;
     }
 
+    const std::vector<Triangle>& Model3D::getTriangles() const
+    {
+        return m_Triangles;
+    }
+
     void Model3D::render(const TG3D& parentMat)
     {
         if (m_Triangles.size() <= 0) return;
 
-        TG3D modelMatrix = parentMat * getModelMatrix();
-
         for (Triangle& triangle: m_Triangles)
         {
-            triangle.render(modelMatrix);
+            triangle.render(parentMat);
         }
     }
 }

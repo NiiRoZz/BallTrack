@@ -13,10 +13,11 @@
 #include "Math/Dir3D.h"
 #include "Math/TG3D.h"
 #include "Utils/ObjLoader.h"
+#include "Entities/CircleEntity.h"
 
 using namespace BallTrack;
 
-std::vector<Model3D> allModels;
+std::vector<Entity> allEntities;
 
 float scale = 1.f;
 
@@ -62,11 +63,11 @@ static void scene(void) {
 
 	Rt3D rot = Rt3D(ry, Dir3D(0.0f, 1.0f, 0.f)) * Rt3D(rx, Dir3D(1.0f, 0.0f, 0.f)) * Rt3D(rz, Dir3D(0.0f, 0.0f, 1.f));
 
-	for (Model3D& model : allModels)
+	for (Entity& entity : allEntities)
 	{
-		model.setScale(Sc3D(scale));
-		model.setRotation(rot);
-		model.render();
+		entity.setScale(Sc3D(scale));
+		entity.setRotation(rot);
+		entity.render();
 	}
 
 	glPopMatrix();
@@ -175,9 +176,14 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 
 	ObjLoader loader;
-	allModels = loader.loadObjFile("../models/", "untitled");
+	std::vector<Model3D> allModels = loader.loadObjFile("../models/", "untitled");
 
 	std::cout << "nmb models : " << allModels.size() << std::endl;
+
+	if (allModels.size() > 0)
+	{
+		allEntities.emplace_back(allModels[0]);
+	}
 
 	glutMainLoop();
 	return 0;
