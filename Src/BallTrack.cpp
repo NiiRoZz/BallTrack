@@ -177,8 +177,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(reshape);
 	glutDisplayFunc(display);
 
-	ObjLoader loader;
-	std::vector<Model3D> allModels = loader.loadObjFile("../models/", "untitled");
+	std::vector<Model3D> allModels = ObjLoader::loadObjFile("../models/", "untitled");
 
 	std::cout << "nmb models : " << allModels.size() << std::endl;
 
