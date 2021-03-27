@@ -1,15 +1,15 @@
-#ifndef _BALLTRACK_CIRCLEENTITY_H
-#define _BALLTRACK_CIRCLEENTITY_H
+#ifndef _BALLTRACK_SPHEREENTITY_H
+#define _BALLTRACK_SPHEREENTITY_H
 
 #include "Physics/PhysicEntity.h"
 
 namespace BallTrack
 {
-    class CircleEntity: public PhysicEntity
+    class SphereEntity: public PhysicEntity
     {
     public:
-        CircleEntity(void);
-        CircleEntity(const Model3D& model);
+        SphereEntity(void);
+        SphereEntity(const Model3D& model);
 
         virtual void update(float dtSeconds);
 
@@ -21,4 +21,4 @@ namespace BallTrack
     };
 }
 
-#endif //_BALLTRACK_CIRCLEENTITY_H
+#endif //_BALLTRACK_SPHEREENTITY_H

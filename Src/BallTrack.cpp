@@ -15,7 +15,7 @@
 #include "Math/Dir3D.h"
 #include "Math/TG3D.h"
 #include "Utils/ObjLoader.h"
-#include "Entities/CircleEntity.h"
+#include "Entities/SphereEntity.h"
 
 using namespace BallTrack;
 
@@ -213,7 +213,7 @@ int main(int argc, char** argv)
 
 	if (allModels.size() > 0)
 	{
-		allEntities.push_back(std::make_unique<CircleEntity>(allModels[0]));
+		allEntities.push_back(std::make_unique<SphereEntity>(allModels[0]));
 	}
 
 	glutMainLoop();

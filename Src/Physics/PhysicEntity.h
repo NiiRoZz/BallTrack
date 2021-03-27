@@ -13,6 +13,10 @@ namespace BallTrack
         PhysicEntity(void);
         PhysicEntity(const Model3D& model);
 
+        const Vector3& getAcceleration() const;
+        const Vector3& getVelocity() const;
+        float getMass() const;
+
     protected:
         Vector3 m_Acceleration;
         Vector3 m_Velocity;

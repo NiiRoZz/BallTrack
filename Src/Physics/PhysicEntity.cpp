@@ -13,4 +13,19 @@ namespace BallTrack
     {
 
     }
+
+    const Vector3& PhysicEntity::getAcceleration() const
+    {
+        return m_Acceleration;
+    }
+
+    const Vector3& PhysicEntity::getVelocity() const
+    {
+        return m_Velocity;
+    }
+
+    float PhysicEntity::getMass() const
+    {
+        return m_Mass;
+    }
 }

@@ -36,7 +36,7 @@ add_executable (BallTrack
   Src/Utils/ObjLoader.cpp
   Src/Physics/PhysicEntity.cpp
   Src/Entities/Entity.cpp
-  Src/Entities/CircleEntity.cpp
+  Src/Entities/SphereEntity.cpp
 )
 
 target_link_libraries(BallTrack ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
