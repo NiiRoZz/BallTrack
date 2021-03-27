@@ -11,6 +11,8 @@ namespace BallTrack
         CircleEntity(void);
         CircleEntity(const Model3D& model);
 
+        virtual void update(float dtSeconds);
+
         void setRadius(float radius);
         float getRadius(void) const;
 

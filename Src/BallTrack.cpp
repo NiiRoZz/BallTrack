@@ -30,6 +30,14 @@ static float rx = 0.0F;
 static float ry = 0.0F;           
 static float rz = 0.0F;
 
+static int oldTime;
+
+static const unsigned int TARGET_UPDATE_FPMS = 16;
+
+//60 FPS
+//We make it a little bit slower than 16, because GLUT only use int and milliseconds, so we cannot say the real 60 FPS, so it will be 16 frames per second
+static const float TARGET_UPDATE_FPS = 0.015989f;
+
 static void init(void) {
 	const GLfloat shininess[] = { 50.0 };
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
@@ -40,6 +48,8 @@ static void init(void) {
 	glDepthFunc(GL_LESS);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_NORMALIZE);
+
+	oldTime = glutGet(GLUT_ELAPSED_TIME);
 }
 
 static void reshape(int wx, int wy) {
@@ -162,7 +172,26 @@ static void special(int specialKey, int , int ) {
 	}
 }
 
+static void updateEntities(int )
+{
+	int t = glutGet(GLUT_ELAPSED_TIME);
+	float dtSeconds = (t - oldTime) / 1000.f;
+	oldTime = t;
 
+	//std::cout << "Elapsed time : " << dtSeconds << std::endl;
+
+	//Just to be sure physics is updated the number of time needed per frame
+	for (float i = dtSeconds; i >= TARGET_UPDATE_FPS; i -= TARGET_UPDATE_FPS)
+	{
+		for (auto& entity: allEntities)
+		{
+			entity->update(dtSeconds);
+		}
+	}
+
+	glutPostRedisplay();
+	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
+}
 
 int main(int argc, char** argv)
 {
@@ -176,6 +205,7 @@ int main(int argc, char** argv)
 	glutSpecialFunc(special);
 	glutReshapeFunc(reshape);
 	glutDisplayFunc(display);
+	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
 
 	std::vector<Model3D> allModels = ObjLoader::loadObjFile("../models/", "untitled");
 

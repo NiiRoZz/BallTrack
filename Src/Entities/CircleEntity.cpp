@@ -14,6 +14,11 @@ namespace BallTrack
 
     }
 
+    void CircleEntity::update(float dtSeconds)
+    {
+        std::cout << "CircleEntity::update dtSeconds : " << dtSeconds << std::endl;
+    }
+
     void CircleEntity::setRadius(float radius)
     {
         m_Radius = radius;
