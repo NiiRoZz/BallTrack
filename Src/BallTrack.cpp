@@ -267,7 +267,7 @@ int main(int argc, char** argv)
 		std::unique_ptr<RectangleEntity> cubeEntity = std::make_unique<RectangleEntity>(cubes[0]);
 		cubeEntity->setSize({1.f, 1.f, 1.f});
 		cubeEntity->setPosition(Pos3D(0.0f, -1.f, 0.f));
-		cubeEntity->setScale(Sc3D(0.5f, 1.f, 1.f));
+		cubeEntity->setScale(Sc3D(1.0f, 1.f, 1.f));
 		allEntities.push_back(std::move(cubeEntity));
 	}
 

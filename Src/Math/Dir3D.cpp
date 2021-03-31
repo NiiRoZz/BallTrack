@@ -1,8 +1,7 @@
 #include "Dir3D.h"
-
-#include <math.h>
-
 #include "Pos3D.h"
+
+#include <cmath>
 
 namespace BallTrack
 {

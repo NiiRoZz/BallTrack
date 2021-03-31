@@ -20,28 +20,21 @@ namespace BallTrack
 
     void SphereEntity::update(float dtSeconds)
     {
-        static constexpr float GRAVITY = -2.5f;
+        static constexpr float GRAVITY = -0.9f;
 
         // Add Drag to emulate rolling friction
-        m_Acceleration.x = -m_Velocity.x * 0.8f;
-		m_Acceleration.y = -m_Velocity.y * 0.8f;
-        m_Acceleration.z = -m_Velocity.z * 0.8f;
+        m_Acceleration = (m_Velocity * -1.f) * 0.8f;
 
         // Update ball physics
-        m_Velocity.x += m_Acceleration.x * dtSeconds;
+        m_Velocity += m_Acceleration * dtSeconds;
         m_Velocity.y += m_Acceleration.y * dtSeconds + GRAVITY * dtSeconds;
-        m_Velocity.z += m_Acceleration.z * dtSeconds;
 
-        m_Position.x += m_Velocity.x * dtSeconds;
-        m_Position.y += m_Velocity.y * dtSeconds;
-        m_Position.z += m_Velocity.z * dtSeconds;
+        m_Position += m_Velocity * dtSeconds;
 
         // Clamp velocity near zero
         if (std::abs(m_Velocity.magnitude()) < 0.01f)
         {
-            m_Velocity.x = 0.f;
-            m_Velocity.y = 0.f;
-            m_Velocity.z = 0.f;
+            m_Velocity *= 0.f;
         }
     }
 
