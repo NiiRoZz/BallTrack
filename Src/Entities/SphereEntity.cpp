@@ -20,7 +20,7 @@ namespace BallTrack
 
     void SphereEntity::update(float dtSeconds)
     {
-        static constexpr float GRAVITY = -0.9f;
+        static constexpr float GRAVITY = -2.5f;
 
         // Add Drag to emulate rolling friction
         m_Acceleration.x = -m_Velocity.x * 0.8f;
