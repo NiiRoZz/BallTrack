@@ -37,7 +37,7 @@ namespace BallTrack
         m_Position.z += m_Velocity.z * dtSeconds;
 
         // Clamp velocity near zero
-        if (std::abs(m_Velocity.x * m_Velocity.x + m_Velocity.y * m_Velocity.y + m_Velocity.z * m_Velocity.z) < 0.01f)
+        if (std::abs(m_Velocity.magnitude()) < 0.01f)
         {
             m_Velocity.x = 0.f;
             m_Velocity.y = 0.f;

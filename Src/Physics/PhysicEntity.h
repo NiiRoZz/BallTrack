@@ -4,6 +4,7 @@
 #include "Entities/Entity.h"
 #include "Math/Vector3.h"
 #include "Math/Pos3D.h"
+#include "Math/Dir3D.h"
 
 namespace BallTrack
 {
@@ -17,13 +18,13 @@ namespace BallTrack
 
         virtual bool resolveCollision(PhysicEntity* target) = 0;
 
-        const Vector3& getAcceleration() const;
-        const Vector3& getVelocity() const;
+        const Dir3D& getAcceleration() const;
+        const Dir3D& getVelocity() const;
         float getMass() const;
 
     protected:
-        Vector3 m_Acceleration;
-        Vector3 m_Velocity;
+        Dir3D m_Acceleration;
+        Dir3D m_Velocity;
         float m_Mass;
     };
 }
