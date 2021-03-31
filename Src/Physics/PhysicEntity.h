@@ -13,6 +13,10 @@ namespace BallTrack
         PhysicEntity(void);
         PhysicEntity(const Model3D& model);
 
+        virtual void update(float dtSeconds) = 0;
+
+        virtual bool resolveCollision(PhysicEntity* target) = 0;
+
         const Vector3& getAcceleration() const;
         const Vector3& getVelocity() const;
         float getMass() const;

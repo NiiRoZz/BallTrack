@@ -26,22 +26,22 @@ namespace BallTrack
     {
     }
 
-	float Dir3D::norme(void) const
+	float Dir3D::magnitude(void) const
 	{
 		return sqrtf(x * x + y * y + z * z);
 	}
 
 	Dir3D Dir3D::normalize(void) const
 	{
-		float norm = norme();
+		float mag = magnitude();
 
 		Dir3D res;
 
-		if (norm != 0.0f)
+		if (mag != 0.0f)
 		{
-			res.x = x / norm;
-			res.y = y / norm;
-			res.z = z / norm;
+			res.x = x / mag;
+			res.y = y / mag;
+			res.z = z / mag;
 		}
 
 		return res;

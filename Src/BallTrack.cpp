@@ -16,6 +16,7 @@
 #include "Math/TG3D.h"
 #include "Utils/ObjLoader.h"
 #include "Entities/SphereEntity.h"
+#include "Entities/RectangleEntity.h"
 
 using namespace BallTrack;
 
@@ -77,10 +78,13 @@ static void scene(void) {
 
 	for (auto& entity : allEntities)
 	{
-		entity->setScale(Sc3D(scale));
+		//std::cout << "Position : " << entity->getPosition().x << " " << entity->getPosition().y << " " << entity->getPosition().z << std::endl;
+		//entity->setScale(Sc3D(scale));
 		entity->setRotation(rot);
 		entity->render();
 	}
+
+	std::cout << std::endl;
 
 	glPopMatrix();
 }
@@ -169,6 +173,14 @@ static void special(int specialKey, int , int ) {
 		rx -= 0.1F;
 		glutPostRedisplay();
 		break;
+	case GLUT_KEY_F1:
+		rz += 0.1F;
+		glutPostRedisplay();
+		break;
+	case GLUT_KEY_F2:
+		rz -= 0.1F;
+		glutPostRedisplay();
+		break;
 	}
 }
 
@@ -183,9 +195,48 @@ static void updateEntities(int )
 	//Just to be sure physics is updated the number of time needed per frame
 	for (float i = dtSeconds; i >= TARGET_UPDATE_FPS; i -= TARGET_UPDATE_FPS)
 	{
+		//Update position entity from velocity, only physic entities
 		for (auto& entity: allEntities)
 		{
-			entity->update(dtSeconds);
+			PhysicEntity* physicEntity = dynamic_cast<PhysicEntity*>(entity.get());
+
+			if (physicEntity != nullptr)
+			{
+				physicEntity->update(dtSeconds);
+			}
+		}
+
+		//Update static collisions only physic entities
+		std::vector<std::pair<SphereEntity*, PhysicEntity*>> collidingPairs;
+		for (auto& entity: allEntities)
+		{
+			SphereEntity* sphereEntity = dynamic_cast<SphereEntity*>(entity.get());
+
+			if (sphereEntity != nullptr)
+			{
+				for (auto& target: allEntities)
+				{
+					PhysicEntity* physicTarget = dynamic_cast<PhysicEntity*>(target.get());
+
+					if (physicTarget != nullptr)
+					{
+						if (sphereEntity != physicTarget && sphereEntity->resolveCollision(physicTarget))
+						{
+							collidingPairs.emplace_back(sphereEntity, physicTarget);
+						}
+					}
+				}
+			}
+		}
+
+		// Now work out dynamic collisions
+		for (auto& c : collidingPairs)
+		{
+			(void) c;
+			//PhysicEntity* entity1 = c.first;
+			//PhysicEntity* entity2 = c.second;
+
+			//float fDistance = 
 		}
 	}
 
@@ -207,13 +258,29 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
 
-	std::vector<Model3D> allModels = ObjLoader::loadObjFile("../models/", "untitled");
+	std::vector<Model3D> cubes = ObjLoader::loadObjFile("../models/", "cube");
 
-	std::cout << "nmb models : " << allModels.size() << std::endl;
+	std::cout << "nmb cubes : " << cubes.size() << std::endl;
 
-	if (allModels.size() > 0)
+	if (cubes.size() > 0)
 	{
-		allEntities.push_back(std::make_unique<SphereEntity>(allModels[0]));
+		std::unique_ptr<RectangleEntity> cubeEntity = std::make_unique<RectangleEntity>(cubes[0]);
+		cubeEntity->setSize({1.f, 1.f, 1.f});
+		cubeEntity->setPosition(Pos3D(0.0f, -1.f, 0.f));
+		cubeEntity->setScale(Sc3D(0.5f, 1.f, 1.f));
+		allEntities.push_back(std::move(cubeEntity));
+	}
+
+	std::vector<Model3D> spheres = ObjLoader::loadObjFile("../models/", "sphere");
+
+	std::cout << "nmb spheres : " << spheres.size() << std::endl;
+
+	if (spheres.size() > 0)
+	{
+		std::unique_ptr<SphereEntity> sphereEntity = std::make_unique<SphereEntity>(spheres[0]);
+		sphereEntity->setRadius(1.f);
+		sphereEntity->setPosition(Pos3D(0.0f, 0.9f, 0.f));
+		allEntities.push_back(std::move(sphereEntity));
 	}
 
 	glutMainLoop();

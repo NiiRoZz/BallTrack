@@ -37,4 +37,9 @@ namespace BallTrack
     {
         return Pos3D(x + rhs.x, y + rhs.y, z + rhs.z);
     }
+
+    Pos3D Pos3D::operator-(const Pos3D& rhs) const
+    {
+        return Pos3D(x - rhs.x, y - rhs.y, z - rhs.z);
+    }
 }

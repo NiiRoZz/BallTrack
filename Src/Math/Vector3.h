@@ -3,11 +3,14 @@
 
 namespace BallTrack
 {
+    class Pos3D;
+    
     class Vector3
     {
     public:
         Vector3(void);
         Vector3(float xin, float yin, float zin);
+        Vector3(const Pos3D& pos);
 
     public:
         float x;

@@ -15,7 +15,7 @@ namespace BallTrack
 		Dir3D(const Pos3D &p1, const Pos3D &p2);  // Constructeur pour construire la direction p1 p2 
 		Dir3D(const CH3D& ch);
 
-		float norme(void) const;
+		float magnitude(void) const;
 		Dir3D normalize(void) const;
 
 		float operator*(const Dir3D& dir) const; // produit scalaire entre this et dir 

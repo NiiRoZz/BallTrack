@@ -1,4 +1,5 @@
 #include "Vector3.h"
+#include "Pos3D.h"
 
 namespace BallTrack
 {
@@ -9,6 +10,11 @@ namespace BallTrack
 
     Vector3::Vector3(float xin, float yin, float zin)
     : x(xin), y(yin), z(zin)
+    {
+    }
+
+    Vector3::Vector3(const Pos3D& pos)
+    : Vector3(pos.x, pos.y, pos.z)
     {
     }
 }

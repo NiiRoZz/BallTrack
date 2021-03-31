@@ -47,6 +47,7 @@ namespace BallTrack
         }
         glEnd();
 
+        /* Show normals ?
         glBegin(GL_LINES);
         for (const Vertex& vertex: m_Vertices)
         {
@@ -63,8 +64,7 @@ namespace BallTrack
             glVertex3f(nextPoint.x, nextPoint.y, nextPoint.z);
         }
         glEnd();
-
-        //std::cout << std::endl;
+        */
     }
 
     const std::array<Vertex, 3>& Triangle::getVertices()

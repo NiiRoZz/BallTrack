@@ -17,6 +17,8 @@ namespace BallTrack
 
 		Pos3D operator+(const Pos3D& rhs) const;
 		Pos3D operator+(const CH3D& rhs) const;
+
+		Pos3D operator-(const Pos3D& rhs) const;
 	};
 }
 

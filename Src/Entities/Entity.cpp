@@ -14,7 +14,7 @@ namespace BallTrack
         m_Model3D.render(modelMatrix);
     }
 
-    const Sc3D& Entity::getScale()
+    const Sc3D& Entity::getScale() const
     {
         return m_Scale;
     }
@@ -24,7 +24,7 @@ namespace BallTrack
         m_Scale = scale;
     }
 
-    const Rt3D& Entity::getRotation()
+    const Rt3D& Entity::getRotation() const
     {
         return m_Rotation;
     }
@@ -34,7 +34,7 @@ namespace BallTrack
         m_Rotation = rotation;
     }
 
-    const Pos3D& Entity::getPosition()
+    const Pos3D& Entity::getPosition() const
     {
         return m_Position;
     }
