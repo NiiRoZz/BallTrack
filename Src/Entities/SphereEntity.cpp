@@ -80,13 +80,7 @@ namespace BallTrack
 
     float SphereEntity::distance(const SphereEntity* target)
     {
-        const Pos3D& targetPos = target->getPosition();
-
-        float distX = m_Position.x - targetPos.x;
-        float distY = m_Position.y - targetPos.y;
-        float distZ = m_Position.z - targetPos.z;
-
-        return std::sqrt(distX * distX + distY * distY + distZ * distZ);
+        return Dir3D(target->getPosition(), m_Position).magnitude();
     }
 
     bool SphereEntity::resolveCollision(SphereEntity* target)

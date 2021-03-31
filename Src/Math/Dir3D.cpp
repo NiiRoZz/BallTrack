@@ -28,7 +28,7 @@ namespace BallTrack
 
 	float Dir3D::magnitude(void) const
 	{
-		return sqrtf(x * x + y * y + z * z);
+		return std::sqrt(x * x + y * y + z * z);
 	}
 
 	Dir3D Dir3D::normalize(void) const
