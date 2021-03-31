@@ -47,7 +47,7 @@ namespace BallTrack
                 continue;
             }
 
-            std::cout << line << '\n';
+            //std::cout << line << '\n';
 
             std::vector<std::string> tokens = split(line, " ");
 
