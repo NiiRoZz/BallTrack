@@ -1,6 +1,11 @@
 #ifndef _BALLTRACK_TRIANGLE_H
 #define _BALLTRACK_TRIANGLE_H
 
+#if defined(WIN32) || defined(WIN64)
+    #define NOMINMAX
+#endif
+
+
 #include <array>
 #include <vector>
 
