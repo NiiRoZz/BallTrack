@@ -11,8 +11,10 @@ namespace BallTrack
 	class Camera
 	{
 	public:
-		Camera(Pos3D pos, Pos3D center, Dir3D up);
-		TG3D getViewMatrix() const ;
+		Camera(const Pos3D& pos, const Pos3D& center, const Dir3D& up);
+		TG3D getViewMatrix() const;
+		void setPosition(const Pos3D& pos);
+		void setCenter(const Pos3D center);
 
 	private: 
 		TG3D lookAt() const;

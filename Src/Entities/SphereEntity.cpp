@@ -126,10 +126,12 @@ namespace BallTrack
 
     bool SphereEntity::resolveCollision(RectangleEntity* target)
     {
-        Pos3D posSphere = getPosition() * target->getRotation().invert();
+        TG3D inverseRot = target->getRotation().invert();
+
+        Pos3D posSphere = getPosition() * inverseRot;
         float radiusSphere = getMaximumRadius();
 
-        Pos3D posRectangle = target->getPosition();
+        Pos3D posRectangle = target->getPosition() * inverseRot;
         Vector3 sizeRectangle = target->getScaledSize();
 
         Pos3D vNearestPoint;

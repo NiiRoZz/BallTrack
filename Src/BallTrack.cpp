@@ -50,7 +50,8 @@ float fraction = 0.1f;
 */
 
 static TG3D projectionMatrix;
-static Camera camera(Pos3D(0.0f, 0.0f, 4.0f), Pos3D(0.f, 0.f, 0.f), Dir3D(0.f,1.f,0.f));
+static const Pos3D DefaultCameraPos = Pos3D(0.0f, 0.0f, 4.0f);
+static Camera camera(DefaultCameraPos, Pos3D(0.f, 0.f, 0.f), Dir3D(0.f, 1.f, 0.f));
 static SphereEntity* bille = nullptr;
 
 //60 FPS
@@ -141,7 +142,6 @@ static void scene(void) {
 	for (auto& entity : allEntities)
 	{
 		//std::cout << "Position : " << entity->getPosition().x << " " << entity->getPosition().y << " " << entity->getPosition().z << std::endl;
-		//entity->setScale(Sc3D(scale));
 		entity->setRotation(rot);
 		entity->render(viewProjection);
 	}
@@ -272,8 +272,6 @@ static void updateEntities(int )
 	float dtSeconds = (t - oldTime) / 1000.f;
 	oldTime = t;
 
-	//std::cout << "Elapsed time : " << dtSeconds << std::endl;
-
 	//Just to be sure physics is updated the number of time needed per frame
 	for (float i = dtSeconds; i >= TARGET_UPDATE_FPS; i -= TARGET_UPDATE_FPS)
 	{
@@ -316,6 +314,12 @@ static void updateEntities(int )
 		{
 			c.first->dynamicCollision(c.second);
 		}
+	}
+
+	if (bille != nullptr)
+	{
+		camera.setPosition(bille->getPosition() + DefaultCameraPos);
+		camera.setCenter(bille->getPosition());
 	}
 
 	glutPostRedisplay();
@@ -361,7 +365,7 @@ int main(int argc, char** argv)
 			std::unique_ptr<SphereEntity> sphereEntity = std::make_unique<SphereEntity>(spheres[0]);
 			sphereEntity->setRadius(1.f);
 			sphereEntity->setPosition(Pos3D(0.0f, 0.9f, 0.f));
-			bille = sphereEntity.get();// if bille != null ptr && dir3D
+			bille = sphereEntity.get();
 			allEntities.push_back(std::move(sphereEntity));
 		}
 

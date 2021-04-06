@@ -3,7 +3,7 @@
 
 namespace BallTrack
 {
-	Camera::Camera(Pos3D pos, Pos3D center, Dir3D up)
+	Camera::Camera(const Pos3D& pos, const Pos3D& center, const Dir3D& up)
 	: m_Position(pos)
 	, m_Up(up)
 	, m_Center(center)
@@ -13,6 +13,16 @@ namespace BallTrack
 	TG3D Camera::getViewMatrix() const
 	{
 		return lookAt();
+	}
+
+	void Camera::setPosition(const Pos3D& pos)
+	{
+		m_Position = pos;
+	}
+
+	void Camera::setCenter(const Pos3D center)
+	{
+		m_Center = center;
 	}
 
 	TG3D Camera::lookAt() const
