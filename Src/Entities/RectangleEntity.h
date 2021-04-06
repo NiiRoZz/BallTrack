@@ -12,6 +12,7 @@ namespace BallTrack
         RectangleEntity(const Model3D& model);
 
         virtual bool resolveCollision(PhysicEntity* target) override;
+        virtual void dynamicCollision(PhysicEntity* target) override;
 
         virtual void update(float dtSeconds) override;
 

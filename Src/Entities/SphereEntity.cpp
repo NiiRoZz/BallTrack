@@ -56,6 +56,25 @@ namespace BallTrack
         return false;
     }
 
+    void SphereEntity::dynamicCollision(PhysicEntity* target)
+    {
+        SphereEntity* sphereEntity = dynamic_cast<SphereEntity*>(target);
+        if (sphereEntity != nullptr)
+        {
+            dynamicCollision(sphereEntity);
+            return;
+        }
+
+        RectangleEntity* rectangleEntity = dynamic_cast<RectangleEntity*>(target);
+        if (rectangleEntity != nullptr)
+        {
+            dynamicCollision(rectangleEntity);
+            return;
+        }
+
+        assert(false && "dynamicCollision function of SphereEntity can't handle the target type entity\n");
+    }
+
     void SphereEntity::setRadius(float radius)
     {
         m_Radius = radius;
@@ -78,12 +97,30 @@ namespace BallTrack
 
     bool SphereEntity::resolveCollision(SphereEntity* target)
     {
-        (void) *target;
-        /*result.fDistance = distance(target);
-        result.distance = getPosition() - target->getPosition();
-        result.fOverlap = 0.5f * (result.fDistance - getMaximumRadius() - target->getMaximumRadius());
-        */
-        std::cout << "SphereEntity::resolveCollision SphereEntity : " << target << std::endl;
+        float sphereRadius = getMaximumRadius();
+        float targetRadius = target->getMaximumRadius();
+
+        Pos3D spherePosition = getPosition();
+        Pos3D targetPosition = target->getPosition();
+        Pos3D diffPosition = spherePosition - targetPosition;
+
+        float fDistance = distance(target);
+
+        //Overlap
+        if (fDistance <= (sphereRadius + targetRadius))
+        {
+            float fOverlap = 0.5f * (fDistance - sphereRadius - targetRadius);
+
+            spherePosition += diffPosition * fOverlap / fDistance;
+            setPosition(spherePosition);
+
+            diffPosition = spherePosition - targetPosition;
+            targetPosition += diffPosition * fOverlap / fDistance;
+            target->setPosition(targetPosition);
+
+            return true;
+        }
+
         return false;
     }
 
@@ -103,15 +140,63 @@ namespace BallTrack
         Dir3D vRayToNearest(posSphere, vNearestPoint);
         float fOverlap = radiusSphere - vRayToNearest.magnitude();
 		if (std::isnan(fOverlap)) fOverlap = 0;
-
-        //std::cout << "fOverlap : " << fOverlap << std::endl;
+        
         if (fOverlap > 0)
 		{
             posSphere = posSphere - vRayToNearest.normalize() * fOverlap;
             setPosition(posSphere * target->getRotation());
+
             return true;
         }
 
         return false;
+    }
+
+    void SphereEntity::dynamicCollision(SphereEntity* target)
+    {
+        Pos3D spherePosition = getPosition();
+        Pos3D targetPosition = target->getPosition();
+
+        Dir3D sphereVelocity = getVelocity();
+        Dir3D targetVelocity = getVelocity();
+
+        float sphereMass = getMass();
+        float targetMass = target->getMass();
+
+        float fDistance = distance(target);
+
+        Dir3D normal = Dir3D(spherePosition, targetPosition) / fDistance;
+
+        // Tangent
+        float tx = -normal.y;
+        float ty = normal.x;
+        float tz = normal.z;
+
+        float dpTan1 = sphereVelocity.x * tx + sphereVelocity.y * ty + sphereVelocity.z * tz;
+		float dpTan2 = targetVelocity.x * tx + targetVelocity.y * ty + targetVelocity.z * tz;
+
+        float dpNorm1 = sphereVelocity.x * normal.x + sphereVelocity.y * normal.y + sphereVelocity.z * normal.z;
+		float dpNorm2 = targetVelocity.x * normal.x + targetVelocity.y * normal.y + targetVelocity.z * normal.z;
+
+        float m1 = (dpNorm1 * (sphereMass - targetMass) + 2.0f * targetMass * dpNorm2) / (sphereMass + targetMass);
+		float m2 = (dpNorm2 * (targetMass - sphereMass) + 2.0f * sphereMass * dpNorm1) / (sphereMass + targetMass);
+
+        sphereVelocity.x = tx * dpTan1 + normal.x * m1;
+        sphereVelocity.y = ty * dpTan1 + normal.y * m1;
+        sphereVelocity.z = tz * dpTan1 + normal.z * m1;
+        setVelocity(sphereVelocity);
+
+        targetVelocity.x = tx * dpTan2 + normal.x * m2;
+        targetVelocity.y = ty * dpTan2 + normal.y * m2;
+        targetVelocity.z = tz * dpTan2 + normal.z * m2;
+        target->setVelocity(targetVelocity);
+
+        std::cout << "dynamicCollision SphereEntity" << std::endl;
+    }
+
+    void SphereEntity::dynamicCollision(RectangleEntity* target)
+    {
+        (void) target;
+        std::cout << "dynamicCollision RectangleEntity" << std::endl;
     }
 }

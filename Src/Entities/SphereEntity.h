@@ -17,6 +17,7 @@ namespace BallTrack
         virtual void update(float dtSeconds) override;
 
         virtual bool resolveCollision(PhysicEntity* target) override;
+        virtual void dynamicCollision(PhysicEntity* target) override;
 
         void setRadius(float radius);
         float getRadius(void) const;
@@ -27,6 +28,9 @@ namespace BallTrack
     protected:
         bool resolveCollision(SphereEntity* target);
         bool resolveCollision(RectangleEntity* target);
+
+        void dynamicCollision(SphereEntity* target);
+        void dynamicCollision(RectangleEntity* target);
 
     private:
         float m_Radius;

@@ -230,13 +230,9 @@ static void updateEntities(int )
 		}
 
 		// Now work out dynamic collisions
-		for (auto& c : collidingPairs)
+		for (const auto& c : collidingPairs)
 		{
-			(void) c;
-			//PhysicEntity* entity1 = c.first;
-			//PhysicEntity* entity2 = c.second;
-
-			//float fDistance = 
+			c.first->dynamicCollision(c.second);
 		}
 	}
 
@@ -258,7 +254,7 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
 
-	std::vector<Model3D> cubes = ObjLoader::loadObjFile("../models/", "cube");
+	std::vector<Model3D> cubes = ObjLoader::loadObjFile("../data/BallTrack/models/", "cube");
 
 	std::cout << "nmb cubes : " << cubes.size() << std::endl;
 
@@ -267,20 +263,29 @@ int main(int argc, char** argv)
 		std::unique_ptr<RectangleEntity> cubeEntity = std::make_unique<RectangleEntity>(cubes[0]);
 		cubeEntity->setSize({1.f, 1.f, 1.f});
 		cubeEntity->setPosition(Pos3D(0.0f, -1.f, 0.f));
-		cubeEntity->setScale(Sc3D(1.0f, 1.f, 1.f));
+		cubeEntity->setScale(Sc3D(3.f, 1.f, 3.f));
 		allEntities.push_back(std::move(cubeEntity));
 	}
 
-	std::vector<Model3D> spheres = ObjLoader::loadObjFile("../models/", "sphere");
+	std::vector<Model3D> spheres = ObjLoader::loadObjFile("../data/BallTrack/models/", "sphere");
 
 	std::cout << "nmb spheres : " << spheres.size() << std::endl;
 
 	if (spheres.size() > 0)
 	{
-		std::unique_ptr<SphereEntity> sphereEntity = std::make_unique<SphereEntity>(spheres[0]);
-		sphereEntity->setRadius(1.f);
-		sphereEntity->setPosition(Pos3D(0.0f, 0.9f, 0.f));
-		allEntities.push_back(std::move(sphereEntity));
+		{
+			std::unique_ptr<SphereEntity> sphereEntity = std::make_unique<SphereEntity>(spheres[0]);
+			sphereEntity->setRadius(1.f);
+			sphereEntity->setPosition(Pos3D(0.0f, 0.9f, 0.f));
+			allEntities.push_back(std::move(sphereEntity));
+		}
+
+		{
+			std::unique_ptr<SphereEntity> sphereEntity = std::make_unique<SphereEntity>(spheres[0]);
+			sphereEntity->setRadius(1.f);
+			sphereEntity->setPosition(Pos3D(1.0f, 0.9f, 0.f));
+			allEntities.push_back(std::move(sphereEntity));
+		}
 	}
 
 	glutMainLoop();

@@ -17,6 +17,7 @@ namespace BallTrack
 
 		float magnitude(void) const;
 		Dir3D normalize(void) const;
+		Dir3D tangent(void) const;
 
 		float operator*(const Dir3D& dir) const; // produit scalaire entre this et dir 
 		Dir3D operator*(const float distance) const;
