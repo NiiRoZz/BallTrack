@@ -35,6 +35,20 @@ static int oldTime;
 
 static const unsigned int TARGET_UPDATE_FPMS = 16;
 
+//camera moving in x
+/*
+// angle of rotation for the camera direction
+float angle = 0.0;
+// actual vector representing the camera's direction
+float lx = 0.0f, lz = -1.0f;
+// XZ position of the camera
+float x = 0.0f, z = 5.0f;
+float fraction = 0.1f;
+*/
+
+
+SphereEntity* bille = nullptr;
+
 //60 FPS
 //We make it a little bit slower than 16, because GLUT only use int and milliseconds, so we cannot say the real 60 FPS, so it will be 16 frames per second
 static const float TARGET_UPDATE_FPS = 0.015989f;
@@ -59,11 +73,14 @@ static void reshape(int wx, int wy) {
 	glLoadIdentity();
 	double ratio = (double)wx / wy;
 	if (wx > wy)
-		glOrtho(-ratio, ratio, -1.0, 1.0, -50000, 50000);
+		glOrtho(-ratio*3, ratio*3 , -1.0*3  , 1.0*3 , -50000, 50000);
 	else
-		glOrtho(-1.0, 1.0, -1.0 / ratio, 1.0 / ratio, -50000, 50000);
+		glOrtho(-1.0*3, 1.0*3, -1.0 / (ratio*3), 1.0 / (ratio*3), -50000, 50000);
+	
+	//glOrtho(-ortho, ortho, -ortho, ortho, -250, 250);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	
 }
 
 static void scene(void) {
@@ -91,12 +108,19 @@ static void scene(void) {
 
 static void display(void)
 {
+	//camera moving in x
+	/*
+	gluLookAt(x, 0.0f, z,
+		x + lx, 0.0f, z + lz,
+		0.0f, 1.0f, 0.0f);*/
+
 	glClearColor(0.5F, 0.5F, 0.5F, 0.5F);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPolygonMode(GL_FRONT_AND_BACK, (pMode == true) ? GL_FILL : GL_LINE);
-	
+
 	scene();
 	glFlush();
+	glLoadIdentity();
 	glutSwapBuffers();
 	int error = glGetError();
 	if (error != GL_NO_ERROR)
@@ -151,7 +175,27 @@ static void keyboard(unsigned char key, int , int )
 			glutPostRedisplay();
 		}
 		break;
+		/*
+		case 'v':
+			angle -= 0.01f;
+			lx = sin(angle);
+			lz = -cos(angle);
+			break;
+		case 'n':
+			angle += 0.01f;
+			lx = sin(angle);
+			lz = -cos(angle);
+			break;
+		case 'g':
+			x += lx * fraction;
+			z += lz * fraction;
+			break;
+		case 'b':
+			x -= lx * fraction;
+			z -= lz * fraction;
+			break;*/
 	}
+	
 }
 
 
@@ -240,6 +284,7 @@ static void updateEntities(int )
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
 }
 
+
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
@@ -250,6 +295,7 @@ int main(int argc, char** argv)
 	init();
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(special);
+
 	glutReshapeFunc(reshape);
 	glutDisplayFunc(display);
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
@@ -277,6 +323,7 @@ int main(int argc, char** argv)
 			std::unique_ptr<SphereEntity> sphereEntity = std::make_unique<SphereEntity>(spheres[0]);
 			sphereEntity->setRadius(1.f);
 			sphereEntity->setPosition(Pos3D(0.0f, 0.9f, 0.f));
+			bille = sphereEntity.get();// if bille != null ptr 
 			allEntities.push_back(std::move(sphereEntity));
 		}
 
