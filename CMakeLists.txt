@@ -42,6 +42,7 @@ add_executable (${PROJ}
   Src/Entities/Entity.cpp
   Src/Entities/SphereEntity.cpp
   Src/Entities/RectangleEntity.cpp
+  Src/Camera/Camera.cpp
 )
 
 target_link_libraries(${PROJ} 
