@@ -17,10 +17,15 @@ namespace BallTrack
         virtual void update(float dtSeconds) = 0;
 
         virtual bool resolveCollision(PhysicEntity* target) = 0;
+        virtual void dynamicCollision(PhysicEntity* target) = 0;
 
         const Dir3D& getAcceleration() const;
+
         const Dir3D& getVelocity() const;
+        void setVelocity(const Dir3D& velocity);
+
         float getMass() const;
+        void setMass(float mass);
 
     protected:
         Dir3D m_Acceleration;

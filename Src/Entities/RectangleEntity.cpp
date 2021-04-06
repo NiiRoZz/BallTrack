@@ -30,6 +30,18 @@ namespace BallTrack
         return false;
     }
 
+    void RectangleEntity::dynamicCollision(PhysicEntity* target)
+    {
+        SphereEntity* sphereEntity = dynamic_cast<SphereEntity*>(target);
+        if (sphereEntity != nullptr)
+        {
+            sphereEntity->dynamicCollision((PhysicEntity*) this);
+            return;
+        }
+        
+        assert(false && "dynamicCollision function of RectangleEntity can't handle the target type entity\n");
+    }
+
     void RectangleEntity::update(float dtSeconds)
     {
         (void) dtSeconds;

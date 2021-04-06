@@ -24,8 +24,18 @@ namespace BallTrack
         return m_Velocity;
     }
 
+    void PhysicEntity::setVelocity(const Dir3D& velocity)
+    {
+        m_Velocity = velocity;
+    }
+
     float PhysicEntity::getMass() const
     {
         return m_Mass;
+    }
+
+    void PhysicEntity::setMass(float mass)
+    {
+        m_Mass = mass;
     }
 }

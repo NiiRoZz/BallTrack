@@ -30,6 +30,11 @@ namespace BallTrack
 		return CH3D(x * size, y * size, z * size, w);
 	}
 
+	CH3D CH3D::operator/(const float size) const
+	{
+		return CH3D(x / size, y / size, z / size, w);
+	}
+
 	CH3D& CH3D::operator*=(const TG3D& rhs)
 	{
 		CH3D temp = *this;
