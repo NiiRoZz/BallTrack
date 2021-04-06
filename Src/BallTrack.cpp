@@ -202,7 +202,7 @@ static void updateEntities(int )
 
 			if (physicEntity != nullptr)
 			{
-				physicEntity->update(dtSeconds);
+				physicEntity->update(TARGET_UPDATE_FPS);
 			}
 		}
 
