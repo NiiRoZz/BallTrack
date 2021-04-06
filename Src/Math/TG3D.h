@@ -9,6 +9,7 @@ namespace BallTrack
 	{
 	public:
 		TG3D(void);
+		TG3D(float value);
 
 		template<typename T>
 		T operator*(const T& rhs) const // Compose this et rhs (this.rhs) et retourne le resultat 

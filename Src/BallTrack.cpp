@@ -17,6 +17,9 @@
 #include "Utils/ObjLoader.h"
 #include "Entities/SphereEntity.h"
 #include "Entities/RectangleEntity.h"
+#include "Camera/Camera.h"
+
+#include <cassert>
 
 using namespace BallTrack;
 
@@ -46,12 +49,54 @@ float x = 0.0f, z = 5.0f;
 float fraction = 0.1f;
 */
 
-
-SphereEntity* bille = nullptr;
+static TG3D projectionMatrix;
+static Camera camera(Pos3D(0.0f, 0.0f, 4.0f), Pos3D(0.f, 0.f, 0.f), Dir3D(0.f,1.f,0.f));
+static SphereEntity* bille = nullptr;
 
 //60 FPS
 //We make it a little bit slower than 16, because GLUT only use int and milliseconds, so we cannot say the real 60 FPS, so it will be 16 frames per second
 static const float TARGET_UPDATE_FPS = 0.015989f;
+
+namespace BallTrack
+{
+	/*static TG3D perspective(const float fovy,
+		const float aspect,
+		const float zNear,
+		const float zFar) 
+	{
+		assert(aspect != 0.f);
+		assert(zFar != zNear);
+
+		const float rad = fovy;
+		const float tanHalfFovy = std::tan(rad / 2.f);
+		TG3D result(0.f);
+		result.mat[0][0] = 1.f / (aspect * tanHalfFovy);
+		result.mat[1][1] = 1.f / (tanHalfFovy);
+		result.mat[2][2] = -(zFar + zNear) / (zFar - zNear);
+		result.mat[3][2] = -1.f;
+		result.mat[2][3] = -(2.f * zFar * zNear) / (zFar - zNear);
+		return result;
+	}*/
+
+	static TG3D ortho(
+		const float left,
+		const float right,
+		const float bottom,
+		const float top,
+		const float zNear,
+		const float zFar)
+	{
+		TG3D result;
+		result.mat[0][0] = 2.f / (right - left);
+		result.mat[1][1] = 2.f / (top - bottom);
+		result.mat[2][2] = - 2.f / (zFar - zNear);
+		result.mat[0][3] = -(right + left) / (right - left);
+		result.mat[1][3] = -(top + bottom) / (top - bottom);
+		result.mat[2][3] = -(zFar + zNear) / (zFar - zNear);
+		return result;
+	}
+
+}
 
 static void init(void) {
 	const GLfloat shininess[] = { 50.0 };
@@ -73,14 +118,13 @@ static void reshape(int wx, int wy) {
 	glLoadIdentity();
 	double ratio = (double)wx / wy;
 	if (wx > wy)
-		glOrtho(-ratio*3, ratio*3 , -1.0*3  , 1.0*3 , -50000, 50000);
+		projectionMatrix = BallTrack::ortho(-ratio * 3, ratio * 3, -1.0 * 3, 1.0 * 3, -50000, 50000);
 	else
-		glOrtho(-1.0*3, 1.0*3, -1.0 / (ratio*3), 1.0 / (ratio*3), -50000, 50000);
-	
-	//glOrtho(-ortho, ortho, -ortho, ortho, -250, 250);
+		projectionMatrix = BallTrack::ortho(-1.0 * 3, 1.0 * 3, -1.0 / (ratio * 3), 1.0 / (ratio * 3), -50000, 50000);
+
+	std::cout << "wx : " << wx << " wy : " << wy << std::endl;
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	
 }
 
 static void scene(void) {
@@ -92,13 +136,14 @@ static void scene(void) {
 	std::cout << "rz : " << rz << std::endl;
 
 	Rt3D rot = Rt3D(ry, Dir3D(0.0f, 1.0f, 0.f)) * Rt3D(rx, Dir3D(1.0f, 0.0f, 0.f)) * Rt3D(rz, Dir3D(0.0f, 0.0f, 1.f));
+	TG3D viewProjection = projectionMatrix * camera.getViewMatrix();
 
 	for (auto& entity : allEntities)
 	{
 		//std::cout << "Position : " << entity->getPosition().x << " " << entity->getPosition().y << " " << entity->getPosition().z << std::endl;
 		//entity->setScale(Sc3D(scale));
 		entity->setRotation(rot);
-		entity->render();
+		entity->render(viewProjection);
 	}
 
 	std::cout << std::endl;
@@ -108,16 +153,9 @@ static void scene(void) {
 
 static void display(void)
 {
-	//camera moving in x
-	/*
-	gluLookAt(x, 0.0f, z,
-		x + lx, 0.0f, z + lz,
-		0.0f, 1.0f, 0.0f);*/
-
 	glClearColor(0.5F, 0.5F, 0.5F, 0.5F);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPolygonMode(GL_FRONT_AND_BACK, (pMode == true) ? GL_FILL : GL_LINE);
-
 	scene();
 	glFlush();
 	glLoadIdentity();
@@ -289,7 +327,7 @@ int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
-	glutInitWindowSize(480, 320);
+	glutInitWindowSize(800, 600);
 	glutInitWindowPosition(50, 50);
 	glutCreateWindow("BallTrack");
 	init();
@@ -323,7 +361,7 @@ int main(int argc, char** argv)
 			std::unique_ptr<SphereEntity> sphereEntity = std::make_unique<SphereEntity>(spheres[0]);
 			sphereEntity->setRadius(1.f);
 			sphereEntity->setPosition(Pos3D(0.0f, 0.9f, 0.f));
-			bille = sphereEntity.get();// if bille != null ptr 
+			bille = sphereEntity.get();// if bille != null ptr && dir3D
 			allEntities.push_back(std::move(sphereEntity));
 		}
 

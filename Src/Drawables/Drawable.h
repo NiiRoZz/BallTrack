@@ -10,7 +10,7 @@ namespace BallTrack
     class Drawable
     {
     public:
-        virtual void render(const TG3D& parentMat = TG3D()) = 0;
+        virtual void render(const TG3D& viewProjection, const TG3D& parentMat = TG3D()) = 0;
     };
 }
 

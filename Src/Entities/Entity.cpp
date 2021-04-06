@@ -7,11 +7,11 @@ namespace BallTrack
     {
     }
 
-    void Entity::render(const TG3D& parentMat)
+    void Entity::render(const TG3D& viewProjection, const TG3D& parentMat)
     {
         TG3D modelMatrix = parentMat * getModelMatrix();
 
-        m_Model3D.render(modelMatrix);
+        m_Model3D.render(viewProjection, modelMatrix);
     }
 
     const Sc3D& Entity::getScale() const

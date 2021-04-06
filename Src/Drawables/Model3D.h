@@ -17,7 +17,7 @@ namespace BallTrack
         void setTriangles(const std::vector<Triangle>& triangles);
         const std::vector<Triangle>& getTriangles() const;
 
-        virtual void render(const TG3D& parentMat = TG3D()) override;
+        virtual void render(const TG3D& viewProjection, const TG3D& parentMat = TG3D()) override;
 
     protected:
         std::vector<Triangle> m_Triangles;
