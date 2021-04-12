@@ -158,7 +158,7 @@ namespace BallTrack
             parentPosition -= diffPosition * fOverlap / fDistance;
             parent->setPosition(parentPosition);
 
-            diffPosition = spherePosition - targetPosition;
+            diffPosition = getPosition() - targetPosition;
             parentTargetPosition += diffPosition * fOverlap / fDistance;
             parentTarget->setPosition(parentTargetPosition);
 
