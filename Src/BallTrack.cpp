@@ -15,8 +15,8 @@
 #include "Math/Dir3D.h"
 #include "Math/TG3D.h"
 #include "Utils/ObjLoader.h"
-#include "Entities/SphereEntity.h"
-#include "Entities/RectangleEntity.h"
+#include "Entities/Entity.h"
+#include "Entities/PhysicEntity.h"
 #include "Camera/Camera.h"
 
 #include <cassert>
@@ -52,7 +52,7 @@ float fraction = 0.1f;
 static TG3D projectionMatrix;
 static const Pos3D DefaultCameraPos = Pos3D(0.0f, 0.0f, 4.0f);
 static Camera camera(DefaultCameraPos, Pos3D(0.f, 0.f, 0.f), Dir3D(0.f, 1.f, 0.f));
-static SphereEntity* bille = nullptr;
+static PhysicEntity* bille = nullptr;
 
 //60 FPS
 //We make it a little bit slower than 16, because GLUT only use int and milliseconds, so we cannot say the real 60 FPS, so it will be 16 frames per second
@@ -119,11 +119,10 @@ static void reshape(int wx, int wy) {
 	glLoadIdentity();
 	double ratio = (double)wx / wy;
 	if (wx > wy)
-		projectionMatrix = BallTrack::ortho(-ratio * 3, ratio * 3, -1.0 * 3, 1.0 * 3, -50000, 50000);
+		projectionMatrix = BallTrack::ortho(-ratio * 3, ratio * 3, -1.0 * 3, 1.0 * 3, 0.001f, 50000);
 	else
-		projectionMatrix = BallTrack::ortho(-1.0 * 3, 1.0 * 3, -1.0 / (ratio * 3), 1.0 / (ratio * 3), -50000, 50000);
+		projectionMatrix = BallTrack::ortho(-1.0 * 3, 1.0 * 3, -1.0 / (ratio * 3), 1.0 / (ratio * 3), 0.0001f, 50000);
 
-	std::cout << "wx : " << wx << " wy : " << wy << std::endl;
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -287,12 +286,12 @@ static void updateEntities(int )
 		}
 
 		//Update static collisions only physic entities
-		std::vector<std::pair<SphereEntity*, PhysicEntity*>> collidingPairs;
+		std::vector<std::pair<PhysicEntity*, PhysicEntity*>> collidingPairs;
 		for (auto& entity: allEntities)
 		{
-			SphereEntity* sphereEntity = dynamic_cast<SphereEntity*>(entity.get());
+			PhysicEntity* physicEntity = dynamic_cast<PhysicEntity*>(entity.get());
 
-			if (sphereEntity != nullptr)
+			if (physicEntity != nullptr)
 			{
 				for (auto& target: allEntities)
 				{
@@ -300,9 +299,9 @@ static void updateEntities(int )
 
 					if (physicTarget != nullptr)
 					{
-						if (sphereEntity != physicTarget && sphereEntity->resolveCollision(physicTarget))
+						if (physicEntity != physicTarget && physicEntity->resolveCollision(physicTarget))
 						{
-							collidingPairs.emplace_back(sphereEntity, physicTarget);
+							collidingPairs.emplace_back(physicEntity, physicTarget);
 						}
 					}
 				}
@@ -310,10 +309,10 @@ static void updateEntities(int )
 		}
 
 		// Now work out dynamic collisions
-		for (const auto& c : collidingPairs)
+		/*for (const auto& c : collidingPairs)
 		{
 			c.first->dynamicCollision(c.second);
-		}
+		}*/
 	}
 
 	if (bille != nullptr)
@@ -348,10 +347,18 @@ int main(int argc, char** argv)
 
 	if (cubes.size() > 0)
 	{
-		std::unique_ptr<RectangleEntity> cubeEntity = std::make_unique<RectangleEntity>(cubes[0]);
-		cubeEntity->setSize({1.f, 1.f, 1.f});
-		cubeEntity->setPosition(Pos3D(0.0f, -1.f, 0.f));
-		cubeEntity->setScale(Sc3D(3.f, 1.f, 3.f));
+		std::unique_ptr<PhysicEntity> cubeEntity = std::make_unique<PhysicEntity>(cubes[0], true);
+		cubeEntity->setPosition(Pos3D(0.0f, 0.f, 0.f));
+		cubeEntity->setScale(Sc3D(2.f, 1.f, 2.f));
+
+		cubeEntity->addCollisionPrimitive(CollisionPrimitive::CreateRectangle(cubeEntity.get(), Pos3D(0.f, 0.f, 0.f), Rt3D(), Vector3(1.f, 1.f, 1.f)));
+
+		cubeEntity->addCollisionPrimitive(CollisionPrimitive::CreateRectangle(cubeEntity.get(), Pos3D(2.f, 1.f, 0.f), Rt3D(), Vector3(1.f, 10.f, 1.f)));
+		cubeEntity->addCollisionPrimitive(CollisionPrimitive::CreateRectangle(cubeEntity.get(), Pos3D(-2.f, 1.f, 0.f), Rt3D(), Vector3(1.f, 1.f, 1.f)));
+
+		cubeEntity->addCollisionPrimitive(CollisionPrimitive::CreateRectangle(cubeEntity.get(), Pos3D(0.f, 1.f, 2.f), Rt3D(), Vector3(1.f, 1.f, 1.f)));
+		cubeEntity->addCollisionPrimitive(CollisionPrimitive::CreateRectangle(cubeEntity.get(), Pos3D(0.f, 1.f, -2.f), Rt3D(), Vector3(1.f, 1.f, 1.f)));
+
 		allEntities.push_back(std::move(cubeEntity));
 	}
 
@@ -362,19 +369,25 @@ int main(int argc, char** argv)
 	if (spheres.size() > 0)
 	{
 		{
-			std::unique_ptr<SphereEntity> sphereEntity = std::make_unique<SphereEntity>(spheres[0]);
-			sphereEntity->setRadius(1.f);
-			sphereEntity->setPosition(Pos3D(0.0f, 0.9f, 0.f));
+			std::unique_ptr<PhysicEntity> sphereEntity = std::make_unique<PhysicEntity>(spheres[0], false);
+			sphereEntity->setPosition(Pos3D(0.0f, 2.9f, 0.f));
+			sphereEntity->setScale(Sc3D(1.05f));
+
+			//sphereEntity->addCollisionPrimitive(CollisionPrimitive::CreateSphere(sphereEntity.get(), Pos3D(0.f, 0.f, 0.f), Rt3D(), 1.f));
+
+			sphereEntity->addCollisionPrimitive(CollisionPrimitive::CreateSphere(sphereEntity.get(), Pos3D(0.f, 0.f, 0.f), Rt3D(), 1.f));
+
 			bille = sphereEntity.get();
+
 			allEntities.push_back(std::move(sphereEntity));
 		}
 
-		{
+		/*{
 			std::unique_ptr<SphereEntity> sphereEntity = std::make_unique<SphereEntity>(spheres[0]);
 			sphereEntity->setRadius(1.f);
 			sphereEntity->setPosition(Pos3D(1.0f, 0.9f, 0.f));
 			allEntities.push_back(std::move(sphereEntity));
-		}
+		}*/
 	}
 
 	glutMainLoop();

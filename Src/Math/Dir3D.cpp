@@ -34,7 +34,7 @@ namespace BallTrack
 	{
 		float mag = magnitude();
 
-		Dir3D res;
+		Dir3D res = *this;
 
 		if (mag != 0.0f)
 		{

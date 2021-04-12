@@ -44,7 +44,7 @@ namespace BallTrack
         m_Position = pos;
     }
 
-    TG3D Entity::getModelMatrix(void) const
+    TG3D Entity::getModelMatrix() const
     {
         return Tr3D(m_Position) * m_Rotation * m_Scale;
     }

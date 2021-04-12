@@ -23,10 +23,10 @@ namespace BallTrack
         const Rt3D& getRotation() const;
         void setRotation(const Rt3D& rotation);
 
-        const Pos3D& getPosition(void) const;
+        const Pos3D& getPosition() const;
         void setPosition(const Pos3D& pos);
 
-        TG3D getModelMatrix(void) const;
+        TG3D getModelMatrix() const;
 
     protected:
         Pos3D m_Position;
