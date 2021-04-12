@@ -146,21 +146,21 @@ namespace BallTrack
 
         Pos3D spherePosition = getPosition();
         Pos3D targetPosition = target->getPosition();
-        Pos3D diffPosition = spherePosition - targetPosition;
 
         float fDistance = distance(target);
 
         //Overlap
-        if (fDistance <= (sphereRadius + targetRadius))
+        if ((fDistance * fDistance) <= ((sphereRadius + targetRadius) * (sphereRadius + targetRadius)))
         {
             float fOverlap = 0.5f * (fDistance - sphereRadius - targetRadius);
+            Pos3D diffPosition = spherePosition - targetPosition;
 
-            parentPosition += diffPosition * fOverlap / fDistance;
+            parentPosition -= diffPosition * fOverlap / fDistance;
             parent->setPosition(parentPosition);
 
             diffPosition = spherePosition - targetPosition;
             parentTargetPosition += diffPosition * fOverlap / fDistance;
-            parentTarget->setPosition(targetPosition);
+            parentTarget->setPosition(parentTargetPosition);
 
             return true;
         }

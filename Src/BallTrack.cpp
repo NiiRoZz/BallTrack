@@ -349,7 +349,7 @@ int main(int argc, char** argv)
 	{
 		std::unique_ptr<PhysicEntity> cubeEntity = std::make_unique<PhysicEntity>(cubes[0], true);
 		cubeEntity->setPosition(Pos3D(0.0f, 0.f, 0.f));
-		cubeEntity->setScale(Sc3D(2.f, 1.f, 2.f));
+		cubeEntity->setScale(Sc3D(3.f, 1.f, 3.f));
 
 		cubeEntity->addCollisionPrimitive(CollisionPrimitive::CreateRectangle(cubeEntity.get(), Pos3D(0.f, 0.f, 0.f), Rt3D(), Vector3(1.f, 1.f, 1.f)));
 
@@ -370,10 +370,8 @@ int main(int argc, char** argv)
 	{
 		{
 			std::unique_ptr<PhysicEntity> sphereEntity = std::make_unique<PhysicEntity>(spheres[0], false);
-			sphereEntity->setPosition(Pos3D(0.0f, 2.9f, 0.f));
-			sphereEntity->setScale(Sc3D(1.05f));
-
-			//sphereEntity->addCollisionPrimitive(CollisionPrimitive::CreateSphere(sphereEntity.get(), Pos3D(0.f, 0.f, 0.f), Rt3D(), 1.f));
+			sphereEntity->setPosition(Pos3D(0.0f, 5.9f, 0.5f));
+			sphereEntity->setScale(Sc3D(1.f));
 
 			sphereEntity->addCollisionPrimitive(CollisionPrimitive::CreateSphere(sphereEntity.get(), Pos3D(0.f, 0.f, 0.f), Rt3D(), 1.f));
 
@@ -382,12 +380,15 @@ int main(int argc, char** argv)
 			allEntities.push_back(std::move(sphereEntity));
 		}
 
-		/*{
-			std::unique_ptr<SphereEntity> sphereEntity = std::make_unique<SphereEntity>(spheres[0]);
-			sphereEntity->setRadius(1.f);
-			sphereEntity->setPosition(Pos3D(1.0f, 0.9f, 0.f));
+		{
+			std::unique_ptr<PhysicEntity> sphereEntity = std::make_unique<PhysicEntity>(spheres[0], false);
+			sphereEntity->setPosition(Pos3D(-0.2f, 2.9f, 0.f));
+			sphereEntity->setScale(Sc3D(1.f));
+
+			sphereEntity->addCollisionPrimitive(CollisionPrimitive::CreateSphere(sphereEntity.get(), Pos3D(0.f, 0.f, 0.f), Rt3D(), 1.f));
+
 			allEntities.push_back(std::move(sphereEntity));
-		}*/
+		}
 	}
 
 	glutMainLoop();
