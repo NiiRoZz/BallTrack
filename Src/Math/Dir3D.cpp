@@ -34,7 +34,7 @@ namespace BallTrack
 	{
 		float mag = magnitude();
 
-		Dir3D res;
+		Dir3D res = *this;
 
 		if (mag != 0.0f)
 		{
@@ -48,7 +48,8 @@ namespace BallTrack
 
 	float Dir3D::operator*(const Dir3D& dir) const
 	{
-		return this->x * dir.x + this->y * dir.y + this->z * dir.z;
+		float result = this->x * dir.x + this->y * dir.y + this->z * dir.z;
+		return (result < 0.000001f && result > -0.000001f) ? 0.f : result;
 	}
 
 	Dir3D Dir3D::operator*(const float distance) const

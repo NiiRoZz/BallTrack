@@ -15,7 +15,7 @@ namespace BallTrack
         Entity(void) = default;
         Entity(const Model3D& model);
 
-        virtual void render(const TG3D& parentMat = TG3D()) override;
+        virtual void render(const TG3D& viewProjection, const TG3D& parentMat = TG3D()) override;
 
         const Sc3D& getScale() const;
         void setScale(const Sc3D& scale);
@@ -23,10 +23,10 @@ namespace BallTrack
         const Rt3D& getRotation() const;
         void setRotation(const Rt3D& rotation);
 
-        const Pos3D& getPosition(void) const;
+        const Pos3D& getPosition() const;
         void setPosition(const Pos3D& pos);
 
-        TG3D getModelMatrix(void) const;
+        TG3D getModelMatrix() const;
 
     protected:
         Pos3D m_Position;
