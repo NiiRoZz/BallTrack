@@ -74,14 +74,15 @@ namespace BallTrack
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 // load and generate the texture
                 int width, height, nrChannels;
-                unsigned char* data = stbi_load(texturePath_cstr, &width, &height, &nrChannels, 0);
+                unsigned char* data = stbi_load(texturePath_cstr, &width, &height, &nrChannels, STBI_rgb_alpha);
                 if (data)
                 {
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
                 }
                 else
                 {
                     std::cerr << "Failed to load texture" << std::endl;
+                    glDeleteTextures(1, &textureID);
                 }
                 stbi_image_free(data);
 

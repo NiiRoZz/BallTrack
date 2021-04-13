@@ -49,6 +49,7 @@ static void init(void) {
 	glDepthFunc(GL_LESS);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_NORMALIZE);
+	glEnable(GL_TEXTURE_2D);
 
 	oldTime = glutGet(GLUT_ELAPSED_TIME);
 }
