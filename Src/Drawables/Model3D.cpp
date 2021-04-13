@@ -19,12 +19,12 @@ namespace BallTrack
         return m_Triangles;
     }
 
-    void Model3D::setTextureID(const unsigned int textureID)
+    void Model3D::setTextureID(GLuint textureID)
     {
         m_textureID = textureID;
     }
 
-    const unsigned int Model3D::getTextureID() const
+    GLuint Model3D::getTextureID() const
     {
         return m_textureID;
     }

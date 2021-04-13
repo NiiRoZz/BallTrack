@@ -84,7 +84,7 @@ namespace BallTrack
                 }
                 stbi_image_free(data);
 
-                for each (Model3D model in models)
+                for (auto& model: models)
                 {
                     model.setTextureID(textureID);
                 }

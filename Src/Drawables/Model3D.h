@@ -20,14 +20,14 @@ namespace BallTrack
         void setTriangles(const std::vector<Triangle>& triangles);
         const std::vector<Triangle>& getTriangles() const;
 
-        void setTextureID(const unsigned int textureID);
-        const unsigned int getTextureID() const;
+        void setTextureID(GLuint textureID);
+        GLuint getTextureID() const;
 
         virtual void render(const TG3D& parentMat = TG3D()) override;
 
     protected:
         std::vector<Triangle> m_Triangles;
-        unsigned int m_textureID;
+        GLuint m_textureID;
     };
 }
 
