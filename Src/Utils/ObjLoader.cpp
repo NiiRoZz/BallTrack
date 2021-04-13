@@ -5,8 +5,98 @@
 #include <iostream>
 #include <cstring>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "Utils/stb_image.h"
+
 namespace BallTrack
 {
+
+    std::vector<Model3D> ObjLoader::loadObj(const std::string& path, const std::string& fileName)
+    {
+        std::vector<Model3D> models = ObjLoader::loadObjFile(path, fileName);
+        ObjLoader::loadBtFile(path, fileName, models);
+        return models;
+    }
+
+    void ObjLoader::loadBtFile(const std::string& path, const std::string& fileName, std::vector<Model3D>& models)
+    {
+        std::string btPath = path + fileName + ".bt";
+
+        std::ifstream fs;
+        fs.open(btPath);
+
+        if (!fs.is_open())
+        {
+            std::cerr << "Can't open " << btPath << " : " << std::strerror(errno) << std::endl;
+            return;
+        }
+
+        std::cout << "opened " << btPath << std::endl;
+
+        std::string line;
+
+        while (std::getline(fs, line))
+        {
+            if (line.size() <= 0)
+            {
+                continue;
+            }
+
+            //Remove any whitespace
+            trim(line);
+
+            if (line[0] == '#')
+            {
+                continue;
+            }
+
+            //std::cout << line << '\n';
+
+            std::vector<std::string> tokens = split(line, " ");
+
+            if (tokens.size() <= 0)
+            {
+                continue;
+            }
+
+            if (tokens[0] == "texture")
+            {
+                std::string texturePath = path + tokens[1];
+                const char* texturePath_cstr = texturePath.c_str();
+                GLuint textureID;
+
+                glGenTextures(1, &textureID);
+                glBindTexture(GL_TEXTURE_2D, textureID);
+                // set the texture wrapping/filtering options (on the currently bound texture object)
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                // load and generate the texture
+                int width, height, nrChannels;
+                unsigned char* data = stbi_load(texturePath_cstr, &width, &height, &nrChannels, STBI_rgb_alpha);
+                if (data)
+                {
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+                }
+                else
+                {
+                    std::cerr << "Failed to load texture" << std::endl;
+                    glDeleteTextures(1, &textureID);
+                }
+                stbi_image_free(data);
+
+                for (auto& model: models)
+                {
+                    model.setTextureID(textureID);
+                }
+
+                std::cout << "Loaded texture with id : " << textureID << std::endl; 
+            }
+        }
+        fs.close();
+    }
+
     std::vector<Model3D> ObjLoader::loadObjFile(const std::string& path, const std::string& fileName)
     {
         std::vector<Model3D> models;
@@ -18,7 +108,7 @@ namespace BallTrack
 
         if (!fs.is_open())
         {
-            std::cerr << "error : " << std::strerror(errno) << std::endl;
+            std::cerr << "Can't open " << objPath << " : " << std::strerror(errno) << std::endl;
             return models;
         }
 

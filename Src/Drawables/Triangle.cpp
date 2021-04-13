@@ -9,6 +9,8 @@
 #include <GL/glu.h>
 #include <iostream>
 
+#define NOMINMAX
+
 namespace BallTrack
 {
     Triangle::Triangle(void)
@@ -41,6 +43,7 @@ namespace BallTrack
             newNormal = newNormal.normalize();
 
             //std::cout << "normal.x : " << vertex.normal.x << " normal.y : " << vertex.normal.y << " normal.z : " << vertex.normal.z << std::endl;
+            //std::cout << "uv.x : " << vertex.uv.x << " uv.y : " << vertex.uv.y << std::endl;
 
             glTexCoord2f(vertex.uv.x, vertex.uv.y);
             glNormal3f(newNormal.x, newNormal.y, newNormal.z);
