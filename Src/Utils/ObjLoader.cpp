@@ -61,7 +61,8 @@ namespace BallTrack
 
             if (tokens[0] == "texture")
             {
-                const char* pngPath = tokens[1].c_str();
+                std::string texturePath = path + tokens[1];
+                const char* texturePath_cstr = texturePath.c_str();
                 GLuint textureID;
 
                 glGenTextures(1, &textureID);
@@ -73,7 +74,7 @@ namespace BallTrack
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                 // load and generate the texture
                 int width, height, nrChannels;
-                unsigned char* data = stbi_load(pngPath, &width, &height, &nrChannels, 0);
+                unsigned char* data = stbi_load(texturePath_cstr, &width, &height, &nrChannels, 0);
                 if (data)
                 {
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);

@@ -6,6 +6,7 @@ namespace BallTrack
 {
     Model3D::Model3D(const std::vector<Triangle>& triangles)
     : m_Triangles(triangles)
+    , m_textureID(0)
     {
     }
     
@@ -33,9 +34,12 @@ namespace BallTrack
     {
         if (m_Triangles.size() <= 0) return;
 
+        std::cout << "Model3D::render : " << getTextureID() << std::endl;
+
+        glBindTexture(GL_TEXTURE_2D, getTextureID());
+
         for (Triangle& triangle: m_Triangles)
         {
-            glBindTexture(GL_TEXTURE_2D, getTextureID());
             triangle.render(parentMat);
         }
     }
