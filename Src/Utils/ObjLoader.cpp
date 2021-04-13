@@ -27,7 +27,7 @@ namespace BallTrack
 
         if (!fs.is_open())
         {
-            std::cerr << "error : " << std::strerror(errno) << std::endl;
+            std::cerr << "Can't open " << btPath << " : " << std::strerror(errno) << std::endl;
             return;
         }
 
@@ -80,7 +80,7 @@ namespace BallTrack
                 }
                 else
                 {
-                    std::cout << "Failed to load texture" << std::endl;
+                    std::cerr << "Failed to load texture" << std::endl;
                 }
                 stbi_image_free(data);
 
@@ -88,6 +88,8 @@ namespace BallTrack
                 {
                     model.setTextureID(textureID);
                 }
+
+                std::cout << "Loaded texture with id : " << textureID << std::endl; 
             }
         }
         fs.close();
@@ -104,7 +106,7 @@ namespace BallTrack
 
         if (!fs.is_open())
         {
-            std::cerr << "error : " << std::strerror(errno) << std::endl;
+            std::cerr << "Can't open " << objPath << " : " << std::strerror(errno) << std::endl;
             return models;
         }
 
