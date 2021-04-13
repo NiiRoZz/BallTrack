@@ -9,6 +9,8 @@
 #include <GL/glu.h>
 #include <iostream>
 
+#define NOMINMAX
+
 namespace BallTrack
 {
     Triangle::Triangle(void)

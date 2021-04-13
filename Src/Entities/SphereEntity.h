@@ -1,6 +1,8 @@
 #ifndef _BALLTRACK_SPHEREENTITY_H
 #define _BALLTRACK_SPHEREENTITY_H
 
+#define NOMINMAX
+
 #include "Physics/PhysicEntity.h"
 
 namespace BallTrack

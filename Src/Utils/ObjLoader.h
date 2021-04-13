@@ -18,7 +18,9 @@ namespace BallTrack
          * @param path Path to the obj file with a '/' at the end of the path
          * @param fileName file name without the .obj format at the end
          */
+        static std::vector<Model3D> loadObj(const std::string& path, const std::string& fileName);
         static std::vector<Model3D> loadObjFile(const std::string& path, const std::string& fileName);
+        static void loadBtFile(const std::string& path, const std::string& fileName, std::vector<Model3D>& models);
 
     private:
         static std::vector<std::string> split(const std::string& s, const std::string& delimiter);

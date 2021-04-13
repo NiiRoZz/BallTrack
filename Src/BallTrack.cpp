@@ -254,7 +254,7 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
 
-	std::vector<Model3D> cubes = ObjLoader::loadObjFile("../data/BallTrack/models/", "cube");
+	std::vector<Model3D> cubes = ObjLoader::loadObj("../data/BallTrack/models/", "cube");
 
 	std::cout << "nmb cubes : " << cubes.size() << std::endl;
 
@@ -267,7 +267,7 @@ int main(int argc, char** argv)
 		allEntities.push_back(std::move(cubeEntity));
 	}
 
-	std::vector<Model3D> spheres = ObjLoader::loadObjFile("../data/BallTrack/models/", "sphere");
+	std::vector<Model3D> spheres = ObjLoader::loadObj("../data/BallTrack/models/", "sphere");
 
 	std::cout << "nmb spheres : " << spheres.size() << std::endl;
 

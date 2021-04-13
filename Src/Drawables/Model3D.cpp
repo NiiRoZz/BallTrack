@@ -19,12 +19,23 @@ namespace BallTrack
         return m_Triangles;
     }
 
+    void Model3D::setTextureID(const unsigned int textureID)
+    {
+        m_textureID = textureID;
+    }
+
+    const unsigned int Model3D::getTextureID() const
+    {
+        return m_textureID;
+    }
+
     void Model3D::render(const TG3D& parentMat)
     {
         if (m_Triangles.size() <= 0) return;
 
         for (Triangle& triangle: m_Triangles)
         {
+            glBindTexture(GL_TEXTURE_2D, getTextureID());
             triangle.render(parentMat);
         }
     }
