@@ -11,14 +11,13 @@
 namespace BallTrack
 {
 
-    std::vector<Model3D> ObjLoader::loadObj(const std::string& path, const std::string& fileName)
+    PhysicEntity ObjLoader::loadEntity(const std::string& path, const std::string& fileName)
     {
-        std::vector<Model3D> models = ObjLoader::loadObjFile(path, fileName);
-        ObjLoader::loadBtFile(path, fileName, models);
-        return models;
+        Model3D model = ObjLoader::loadObjFile(path, fileName);
+        return ObjLoader::loadBtFile(path, fileName, model);
     }
 
-    void ObjLoader::loadBtFile(const std::string& path, const std::string& fileName, std::vector<Model3D>& models)
+    PhysicEntity ObjLoader::loadBtFile(const std::string& path, const std::string& fileName, Model3D& model)
     {
         std::string btPath = path + fileName + ".bt";
 
@@ -34,6 +33,7 @@ namespace BallTrack
         std::cout << "opened " << btPath << std::endl;
 
         std::string line;
+        auto entity = PhysicEntity(model, true);    // static ?
 
         while (std::getline(fs, line))
         {
@@ -86,20 +86,37 @@ namespace BallTrack
                 }
                 stbi_image_free(data);
 
-                for (auto& model: models)
-                {
-                    model.setTextureID(textureID);
-                }
+                model.setTextureID(textureID);
 
                 std::cout << "Loaded texture with id : " << textureID << std::endl; 
             }
+
+            Entity* collided = new Entity();
+
+            if (tokens[0] == "sphere")
+            {
+                collided->setPosition(Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])));
+                collided->setRotation(Rt3D(0, Dir3D(std::stof(tokens[4]), std::stof(tokens[5]), std::stof(tokens[6]))));    // angle ?
+                collided->setScale(Sc3D(std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9])));
+                entity.addCollisionPrimitive(std::make_unique<SphereCollisionPrimitive>(collided));
+            }
+
+            if (tokens[0] == "cube")
+            {
+                collided->setPosition(Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])));
+                collided->setRotation(Rt3D(0, Dir3D(std::stof(tokens[4]), std::stof(tokens[5]), std::stof(tokens[6]))));    // angle ?
+                collided->setScale(Sc3D(std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9])));
+                entity.addCollisionPrimitive(std::make_unique<RectangleCollisionPrimitive>(collided));
+            }
+
         }
         fs.close();
+        return entity;
     }
 
-    std::vector<Model3D> ObjLoader::loadObjFile(const std::string& path, const std::string& fileName)
+    Model3D ObjLoader::loadObjFile(const std::string& path, const std::string& fileName)
     {
-        std::vector<Model3D> models;
+        Model3D model;
 
         std::string objPath = path + fileName + ".obj";
 
@@ -109,7 +126,7 @@ namespace BallTrack
         if (!fs.is_open())
         {
             std::cerr << "Can't open " << objPath << " : " << std::strerror(errno) << std::endl;
-            return models;
+            return model;
         }
 
         std::cout << "opened " << objPath << std::endl;
@@ -150,7 +167,7 @@ namespace BallTrack
             {
                 if (!triangles.empty())
                 {
-                    models.emplace_back(triangles);
+                    model.setTriangles(triangles);
                 }
 
                 triangles.clear();
@@ -244,11 +261,11 @@ namespace BallTrack
 
         if (!triangles.empty())
         {
-            models.emplace_back(triangles);
+            model.setTriangles(triangles);
         }
 
         fs.close();
-        return models;
+        return model;
     }
 
     std::vector<std::string> ObjLoader::split(const std::string& s, const std::string& delimiter)
