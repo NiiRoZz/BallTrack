@@ -7,11 +7,11 @@ namespace BallTrack
     {
     }
 
-    void Entity::render(const TG3D& parentMat)
+    void Entity::render(const TG3D& viewProjection, const TG3D& parentMat)
     {
         TG3D modelMatrix = parentMat * getModelMatrix();
 
-        m_Model3D.render(modelMatrix);
+        m_Model3D.render(viewProjection, modelMatrix);
     }
 
     const Sc3D& Entity::getScale() const
@@ -44,7 +44,7 @@ namespace BallTrack
         m_Position = pos;
     }
 
-    TG3D Entity::getModelMatrix(void) const
+    TG3D Entity::getModelMatrix() const
     {
         return Tr3D(m_Position) * m_Rotation * m_Scale;
     }

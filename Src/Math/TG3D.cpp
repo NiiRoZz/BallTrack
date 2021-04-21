@@ -15,6 +15,17 @@ namespace BallTrack
 		}
 	}
 
+	TG3D::TG3D(float value)
+	{
+		for (int l = 0; l < 4; ++l)
+		{
+			for (int c = 0; c < 4; ++c)
+			{
+				mat[l][c] = value;
+			}
+		}
+	}
+
 	TG3D TG3D::transpose(void) const
 	{
 		TG3D result;

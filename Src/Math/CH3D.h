@@ -19,6 +19,7 @@ namespace BallTrack
 		CH3D& operator*=(const TG3D& rhs);
 		CH3D& operator*=(const float size);
 		CH3D& operator+=(const CH3D& rhs);
+		CH3D& operator-=(const CH3D& rhs);
 
 	public:
 		float x, y, z;

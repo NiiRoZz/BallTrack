@@ -64,4 +64,13 @@ namespace BallTrack
 
 		return *this;
 	}
+
+	CH3D& CH3D::operator-=(const CH3D& rhs)
+	{
+		x -= rhs.x;
+		y -= rhs.y;
+		z -= rhs.z;
+
+		return *this;
+	}
 }

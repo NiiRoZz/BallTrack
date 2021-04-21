@@ -38,10 +38,12 @@ add_executable (${PROJ}
   Src/Math/Vector2.cpp
   Src/Math/Vector3.cpp
   Src/Utils/ObjLoader.cpp
-  Src/Physics/PhysicEntity.cpp
+  Src/Physics/CollisionPrimitive.cpp
+  Src/Physics/RectangleCollisionPrimitive.cpp
+  Src/Physics/SphereCollisionPrimitive.cpp
   Src/Entities/Entity.cpp
-  Src/Entities/SphereEntity.cpp
-  Src/Entities/RectangleEntity.cpp
+  Src/Entities/PhysicEntity.cpp
+  Src/Camera/Camera.cpp
 )
 
 target_link_libraries(${PROJ} 
