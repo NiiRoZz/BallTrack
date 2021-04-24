@@ -13,14 +13,7 @@ namespace BallTrack
     class ObjLoader
     {
     public:
-        /**
-         * @brief Load a .obj file
-         *
-         * It is used to load .obj file. It will try to load the .bt file corresponding to the .obj file
-         * 
-         * @param path Path to the obj file with a '/' at the end of the path
-         * @param fileName file name without the .obj format at the end
-         */
+
         static PhysicEntity loadEntity(const std::string& path, const std::string& fileName);
 
         static Model3D loadObjFile(const std::string& path, const std::string& fileName);

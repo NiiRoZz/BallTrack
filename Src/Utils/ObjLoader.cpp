@@ -33,7 +33,10 @@ namespace BallTrack
         std::cout << "opened " << btPath << std::endl;
 
         std::string line;
-        auto entity = PhysicEntity(model, true);    // static ?
+
+        bool is_static = false;
+        if (fileName == "cube") is_static = true;
+        auto entity = PhysicEntity(model, is_static);
 
         while (std::getline(fs, line))
         {
@@ -92,20 +95,17 @@ namespace BallTrack
             }
 
             Entity* collided = new Entity();
+            collided->setPosition(Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])));
+            auto rot = Rt3D(std::stof(tokens[4]) * std::stof(tokens[4]) * std::stof(tokens[4]), Dir3D(1.0f, 1.0f, 1.0f));
+            collided->setRotation(rot);
+            collided->setScale(Sc3D(std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9])));
 
-            if (tokens[0] == "sphere")
+            if (tokens[0] == "Sphere")
             {
-                collided->setPosition(Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])));
-                collided->setRotation(Rt3D(0, Dir3D(std::stof(tokens[4]), std::stof(tokens[5]), std::stof(tokens[6]))));    // angle ?
-                collided->setScale(Sc3D(std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9])));
                 entity.addCollisionPrimitive(std::make_unique<SphereCollisionPrimitive>(collided));
             }
-
-            if (tokens[0] == "cube")
+            else if (tokens[0] == "Cube")
             {
-                collided->setPosition(Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])));
-                collided->setRotation(Rt3D(0, Dir3D(std::stof(tokens[4]), std::stof(tokens[5]), std::stof(tokens[6]))));    // angle ?
-                collided->setScale(Sc3D(std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9])));
                 entity.addCollisionPrimitive(std::make_unique<RectangleCollisionPrimitive>(collided));
             }
 
