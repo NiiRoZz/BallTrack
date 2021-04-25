@@ -11,14 +11,13 @@
 namespace BallTrack
 {
 
-    std::vector<Model3D> ObjLoader::loadObj(const std::string& path, const std::string& fileName)
+    std::unique_ptr<PhysicEntity> ObjLoader::loadEntity(const std::string& path, const std::string& fileName)
     {
-        std::vector<Model3D> models = ObjLoader::loadObjFile(path, fileName);
-        ObjLoader::loadBtFile(path, fileName, models);
-        return models;
+        Model3D model = ObjLoader::loadObjFile(path, fileName);
+        return ObjLoader::loadBtFile(path, fileName, model);
     }
 
-    void ObjLoader::loadBtFile(const std::string& path, const std::string& fileName, std::vector<Model3D>& models)
+    std::unique_ptr<PhysicEntity> ObjLoader::loadBtFile(const std::string& path, const std::string& fileName, Model3D& model)
     {
         std::string btPath = path + fileName + ".bt";
 
@@ -28,12 +27,14 @@ namespace BallTrack
         if (!fs.is_open())
         {
             std::cerr << "Can't open " << btPath << " : " << std::strerror(errno) << std::endl;
-            return;
+            return nullptr;
         }
 
         std::cout << "opened " << btPath << std::endl;
 
         std::string line;
+
+        auto entity = std::make_unique<PhysicEntity>(model, fileName == "cube");
 
         while (std::getline(fs, line))
         {
@@ -86,20 +87,46 @@ namespace BallTrack
                 }
                 stbi_image_free(data);
 
-                for (auto& model: models)
-                {
-                    model.setTextureID(textureID);
-                }
+                model.setTextureID(textureID);
 
                 std::cout << "Loaded texture with id : " << textureID << std::endl; 
             }
+
+            std::unique_ptr<CollisionPrimitive> primitive;
+
+            if (tokens[0] == "sphere")
+            {
+                primitive = CollisionPrimitive::CreateSphere(
+                    entity.get(),
+                    Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])),
+                    Rt3D(std::stof(tokens[4]), Dir3D(1.0f, 0.0f, 0.0f)) * Rt3D(std::stof(tokens[5]), Dir3D(0.0f, 1.0f, 0.0f)) * Rt3D(std::stof(tokens[6]), Dir3D(0.0f, 0.0f, 1.0f)),
+                    std::max(std::stof(tokens[7]), std::max(std::stof(tokens[8]), std::stof(tokens[9])))
+                );
+            }
+            else if (tokens[0] == "rectangle")
+            {
+                primitive = CollisionPrimitive::CreateRectangle(
+                    entity.get(),
+                    Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])),
+                    Rt3D(std::stof(tokens[4]), Dir3D(1.0f, 0.0f, 0.0f)) * Rt3D(std::stof(tokens[5]), Dir3D(0.0f, 1.0f, 0.0f)) * Rt3D(std::stof(tokens[6]), Dir3D(0.0f, 0.0f, 1.0f)),
+                    {std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9])}
+                );
+            }
+
+            if (primitive.get() != nullptr)
+            {
+                entity->addCollisionPrimitive(std::move(primitive));
+            }
         }
+
         fs.close();
+
+        return entity;
     }
 
-    std::vector<Model3D> ObjLoader::loadObjFile(const std::string& path, const std::string& fileName)
+    Model3D ObjLoader::loadObjFile(const std::string& path, const std::string& fileName)
     {
-        std::vector<Model3D> models;
+        Model3D model;
 
         std::string objPath = path + fileName + ".obj";
 
@@ -109,7 +136,7 @@ namespace BallTrack
         if (!fs.is_open())
         {
             std::cerr << "Can't open " << objPath << " : " << std::strerror(errno) << std::endl;
-            return models;
+            return model;
         }
 
         std::cout << "opened " << objPath << std::endl;
@@ -150,7 +177,7 @@ namespace BallTrack
             {
                 if (!triangles.empty())
                 {
-                    models.emplace_back(triangles);
+                    model.setTriangles(triangles);
                 }
 
                 triangles.clear();
@@ -244,11 +271,11 @@ namespace BallTrack
 
         if (!triangles.empty())
         {
-            models.emplace_back(triangles);
+            model.setTriangles(triangles);
         }
 
         fs.close();
-        return models;
+        return model;
     }
 
     std::vector<std::string> ObjLoader::split(const std::string& s, const std::string& delimiter)

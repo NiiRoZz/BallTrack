@@ -342,54 +342,20 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
 
-	std::vector<Model3D> cubes = ObjLoader::loadObj("../data/BallTrack/models/", "cube");
-
-	std::cout << "nmb cubes : " << cubes.size() << std::endl;
-
-	if (cubes.size() > 0)
 	{
-		std::unique_ptr<PhysicEntity> cubeEntity = std::make_unique<PhysicEntity>(cubes[0], true);
-		cubeEntity->setPosition(Pos3D(0.0f, 0.f, 0.f));
-		cubeEntity->setScale(Sc3D(3.f, 1.f, 3.f));
-
-		cubeEntity->addCollisionPrimitive(CollisionPrimitive::CreateRectangle(cubeEntity.get(), Pos3D(0.f, 0.f, 0.f), Rt3D(), Vector3(1.f, 1.f, 1.f)));
-
-		cubeEntity->addCollisionPrimitive(CollisionPrimitive::CreateRectangle(cubeEntity.get(), Pos3D(2.f, 1.f, 0.f), Rt3D(), Vector3(1.f, 10.f, 1.f)));
-		cubeEntity->addCollisionPrimitive(CollisionPrimitive::CreateRectangle(cubeEntity.get(), Pos3D(-2.f, 1.f, 0.f), Rt3D(), Vector3(1.f, 1.f, 1.f)));
-
-		cubeEntity->addCollisionPrimitive(CollisionPrimitive::CreateRectangle(cubeEntity.get(), Pos3D(0.f, 1.f, 2.f), Rt3D(), Vector3(1.f, 1.f, 1.f)));
-		cubeEntity->addCollisionPrimitive(CollisionPrimitive::CreateRectangle(cubeEntity.get(), Pos3D(0.f, 1.f, -2.f), Rt3D(), Vector3(1.f, 1.f, 1.f)));
-
-		allEntities.push_back(std::move(cubeEntity));
+		auto cube = ObjLoader::loadEntity("../data/BallTrack/models/", "cube");
+		assert(cube.get());
+		cube->setPosition(Pos3D(0.0f, 0.f, 0.f));
+		cube->setScale(Sc3D(1.f, 1.f, 1.f));
+		allEntities.push_back(std::move(cube));
 	}
 
-	std::vector<Model3D> spheres = ObjLoader::loadObj("../data/BallTrack/models/", "sphere");
-
-	std::cout << "nmb spheres : " << spheres.size() << std::endl;
-
-	if (spheres.size() > 0)
 	{
-		{
-			std::unique_ptr<PhysicEntity> sphereEntity = std::make_unique<PhysicEntity>(spheres[0], false);
-			sphereEntity->setPosition(Pos3D(0.0f, 5.9f, 0.5f));
-			sphereEntity->setScale(Sc3D(1.f));
-
-			sphereEntity->addCollisionPrimitive(CollisionPrimitive::CreateSphere(sphereEntity.get(), Pos3D(0.f, 0.f, 0.f), Rt3D(), 1.f));
-
-			bille = sphereEntity.get();
-
-			allEntities.push_back(std::move(sphereEntity));
-		}
-
-		{
-			std::unique_ptr<PhysicEntity> sphereEntity = std::make_unique<PhysicEntity>(spheres[0], false);
-			sphereEntity->setPosition(Pos3D(-0.2f, 2.9f, 0.f));
-			sphereEntity->setScale(Sc3D(1.f));
-
-			sphereEntity->addCollisionPrimitive(CollisionPrimitive::CreateSphere(sphereEntity.get(), Pos3D(0.f, 0.f, 0.f), Rt3D(), 1.f));
-
-			allEntities.push_back(std::move(sphereEntity));
-		}
+		auto sphere = ObjLoader::loadEntity("../data/BallTrack/models/", "sphere");
+		assert(sphere.get());
+		sphere->setPosition(Pos3D(0.0f, 5.9f, 0.5f));
+		sphere->setScale(Sc3D(1.f));
+		allEntities.push_back(std::move(sphere));
 	}
 
 	glutMainLoop();
