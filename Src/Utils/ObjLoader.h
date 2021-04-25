@@ -14,10 +14,10 @@ namespace BallTrack
     {
     public:
 
-        static PhysicEntity loadEntity(const std::string& path, const std::string& fileName);
+        static std::unique_ptr<PhysicEntity> loadEntity(const std::string& path, const std::string& fileName);
 
         static Model3D loadObjFile(const std::string& path, const std::string& fileName);
-        static PhysicEntity loadBtFile(const std::string& path, const std::string& fileName, Model3D& model);
+        static std::unique_ptr<PhysicEntity> loadBtFile(const std::string& path, const std::string& fileName, Model3D& model);
 
     private:
         static std::vector<std::string> split(const std::string& s, const std::string& delimiter);

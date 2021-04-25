@@ -11,13 +11,13 @@
 namespace BallTrack
 {
 
-    PhysicEntity ObjLoader::loadEntity(const std::string& path, const std::string& fileName)
+    std::unique_ptr<PhysicEntity> ObjLoader::loadEntity(const std::string& path, const std::string& fileName)
     {
         Model3D model = ObjLoader::loadObjFile(path, fileName);
         return ObjLoader::loadBtFile(path, fileName, model);
     }
 
-    PhysicEntity ObjLoader::loadBtFile(const std::string& path, const std::string& fileName, Model3D& model)
+    std::unique_ptr<PhysicEntity> ObjLoader::loadBtFile(const std::string& path, const std::string& fileName, Model3D& model)
     {
         std::string btPath = path + fileName + ".bt";
 
@@ -27,16 +27,14 @@ namespace BallTrack
         if (!fs.is_open())
         {
             std::cerr << "Can't open " << btPath << " : " << std::strerror(errno) << std::endl;
-            return;
+            return nullptr;
         }
 
         std::cout << "opened " << btPath << std::endl;
 
         std::string line;
 
-        bool is_static = false;
-        if (fileName == "cube") is_static = true;
-        auto entity = PhysicEntity(model, is_static);
+        auto entity = std::make_unique<PhysicEntity>(model, fileName == "cube");
 
         while (std::getline(fs, line))
         {
@@ -94,23 +92,35 @@ namespace BallTrack
                 std::cout << "Loaded texture with id : " << textureID << std::endl; 
             }
 
-            Entity* collided = new Entity();
-            collided->setPosition(Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])));
-            auto rot = Rt3D(std::stof(tokens[4]) * std::stof(tokens[4]) * std::stof(tokens[4]), Dir3D(1.0f, 1.0f, 1.0f));
-            collided->setRotation(rot);
-            collided->setScale(Sc3D(std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9])));
+            std::unique_ptr<CollisionPrimitive> primitive;
 
-            if (tokens[0] == "Sphere")
+            if (tokens[0] == "sphere")
             {
-                entity.addCollisionPrimitive(std::make_unique<SphereCollisionPrimitive>(collided));
+                primitive = CollisionPrimitive::CreateSphere(
+                    entity.get(),
+                    Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])),
+                    Rt3D(std::stof(tokens[4]), Dir3D(1.0f, 0.0f, 0.0f)) * Rt3D(std::stof(tokens[5]), Dir3D(0.0f, 1.0f, 0.0f)) * Rt3D(std::stof(tokens[6]), Dir3D(0.0f, 0.0f, 1.0f)),
+                    std::max(std::stof(tokens[7]), std::max(std::stof(tokens[8]), std::stof(tokens[9])))
+                );
             }
-            else if (tokens[0] == "Cube")
+            else if (tokens[0] == "rectangle")
             {
-                entity.addCollisionPrimitive(std::make_unique<RectangleCollisionPrimitive>(collided));
+                primitive = CollisionPrimitive::CreateRectangle(
+                    entity.get(),
+                    Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])),
+                    Rt3D(std::stof(tokens[4]), Dir3D(1.0f, 0.0f, 0.0f)) * Rt3D(std::stof(tokens[5]), Dir3D(0.0f, 1.0f, 0.0f)) * Rt3D(std::stof(tokens[6]), Dir3D(0.0f, 0.0f, 1.0f)),
+                    {std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9])}
+                );
             }
 
+            if (primitive.get() != nullptr)
+            {
+                entity->addCollisionPrimitive(std::move(primitive));
+            }
         }
+
         fs.close();
+
         return entity;
     }
 
