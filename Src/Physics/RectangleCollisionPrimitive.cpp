@@ -75,6 +75,12 @@ namespace BallTrack
         {
             return sphereCollision->resolveCollision((CollisionPrimitive*) this);
         }
+
+        RectangleCollisionPrimitive* rectangleCollision = dynamic_cast<RectangleCollisionPrimitive*>(target);
+        if (rectangleCollision != nullptr)
+        {
+            return false;
+        }
         
         assert(false && "resolveCollision function of RectangleCollisionPrimitive can't handle the target collision primitive type\n");
         return false;

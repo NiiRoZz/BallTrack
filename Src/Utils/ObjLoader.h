@@ -1,6 +1,10 @@
 #ifndef _BALLTRACK_OBJLOADER_H
 #define _BALLTRACK_OBJLOADER_H
 
+#if defined(WIN32) || defined(WIN64)
+    #define NOMINMAX
+#endif
+
 #include <vector>
 #include <string>
 #include "Drawables/Model3D.h"

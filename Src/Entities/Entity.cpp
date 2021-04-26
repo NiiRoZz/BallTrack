@@ -48,4 +48,9 @@ namespace BallTrack
     {
         return Tr3D(m_Position) * m_Rotation * m_Scale;
     }
+
+    Model3D& Entity::getModel3D()
+    {
+        return m_Model3D;
+    }
 }

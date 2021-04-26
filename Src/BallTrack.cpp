@@ -50,7 +50,7 @@ float fraction = 0.1f;
 */
 
 static TG3D projectionMatrix;
-static const Pos3D DefaultCameraPos = Pos3D(0.0f, 0.0f, 4.0f);
+static const Pos3D DefaultCameraPos = Pos3D(0.0f, 0.0f, 300.0f);
 static Camera camera(DefaultCameraPos, Pos3D(0.f, 0.f, 0.f), Dir3D(0.f, 1.f, 0.f));
 static PhysicEntity* bille = nullptr;
 
@@ -120,9 +120,9 @@ static void reshape(int wx, int wy) {
 	glLoadIdentity();
 	double ratio = (double)wx / wy;
 	if (wx > wy)
-		projectionMatrix = BallTrack::ortho(-ratio * 3, ratio * 3, -1.0 * 3, 1.0 * 3, 0.001f, 50000);
+		projectionMatrix = BallTrack::ortho(-ratio * 10, ratio * 10, -1.0 * 10, 1.0 * 10, 0.001f, 50000);
 	else
-		projectionMatrix = BallTrack::ortho(-1.0 * 3, 1.0 * 3, -1.0 / (ratio * 3), 1.0 / (ratio * 3), 0.0001f, 50000);
+		projectionMatrix = BallTrack::ortho(-1.0 * 10, 1.0 * 10, -1.0 / (ratio * 10), 1.0 / (ratio * 10), 0.0001f, 50000);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -131,22 +131,14 @@ static void reshape(int wx, int wy) {
 static void scene(void) {
 	glPushMatrix();
 
-	std::cout << "scale : " << scale << std::endl;
-	std::cout << "rx : " << rx << std::endl;
-	std::cout << "ry : " << ry << std::endl;
-	std::cout << "rz : " << rz << std::endl;
-
 	Rt3D rot = Rt3D(ry, Dir3D(0.0f, 1.0f, 0.f)) * Rt3D(rx, Dir3D(1.0f, 0.0f, 0.f)) * Rt3D(rz, Dir3D(0.0f, 0.0f, 1.f));
 	TG3D viewProjection = projectionMatrix * camera.getViewMatrix();
 
 	for (auto& entity : allEntities)
 	{
-		//std::cout << "Position : " << entity->getPosition().x << " " << entity->getPosition().y << " " << entity->getPosition().z << std::endl;
 		entity->setRotation(rot);
 		entity->render(viewProjection);
 	}
-
-	std::cout << std::endl;
 
 	glPopMatrix();
 }
@@ -346,8 +338,17 @@ int main(int argc, char** argv)
 		auto cube = ObjLoader::loadEntity("../data/BallTrack/models/", "cube");
 		assert(cube.get());
 		cube->setPosition(Pos3D(0.0f, 0.f, 0.f));
-		cube->setScale(Sc3D(1.f, 1.f, 1.f));
+		cube->setScale(Sc3D(3.f, 1.f, 3.f));
 		allEntities.push_back(std::move(cube));
+	}
+
+	{
+		auto circuit = ObjLoader::loadEntity("../data/BallTrack/models/", "circuit_test_1");
+		assert(circuit.get());
+		circuit->setStatic(true);
+		circuit->setPosition(Pos3D(0.0f, 0.f, 0.f));
+		circuit->setScale(Sc3D(1.f, 1.f, 1.f));
+		allEntities.push_back(std::move(circuit));
 	}
 
 	{
@@ -355,6 +356,7 @@ int main(int argc, char** argv)
 		assert(sphere.get());
 		sphere->setPosition(Pos3D(0.0f, 5.9f, 0.5f));
 		sphere->setScale(Sc3D(1.f));
+		bille = sphere.get();
 		allEntities.push_back(std::move(sphere));
 	}
 

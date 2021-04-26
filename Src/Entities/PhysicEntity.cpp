@@ -23,6 +23,8 @@ namespace BallTrack
 
         if (true)
         {
+            glBindTexture(GL_TEXTURE_2D, 0);
+            
             for (auto& primitive: m_CollisionPrimitives)
             {
                 primitive->render(viewProjection, modelMatrix);
@@ -39,7 +41,7 @@ namespace BallTrack
     {
         if (isStatic()) return;
 
-        static constexpr float GRAVITY = -0.9f;
+        static constexpr float GRAVITY = -9.8f;
 
         // Add Drag to emulate friction
         m_Acceleration = (m_Velocity * -1.f) * 0.95f;

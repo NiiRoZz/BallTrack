@@ -87,7 +87,7 @@ namespace BallTrack
                 }
                 stbi_image_free(data);
 
-                model.setTextureID(textureID);
+                entity->getModel3D().setTextureID(textureID);
 
                 std::cout << "Loaded texture with id : " << textureID << std::endl; 
             }
@@ -99,7 +99,7 @@ namespace BallTrack
                 primitive = CollisionPrimitive::CreateSphere(
                     entity.get(),
                     Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])),
-                    Rt3D(std::stof(tokens[4]), Dir3D(1.0f, 0.0f, 0.0f)) * Rt3D(std::stof(tokens[5]), Dir3D(0.0f, 1.0f, 0.0f)) * Rt3D(std::stof(tokens[6]), Dir3D(0.0f, 0.0f, 1.0f)),
+                    Rt3D(std::stof(tokens[5]), Dir3D(0.0f, 1.0f, 0.0f)) * Rt3D(std::stof(tokens[4]), Dir3D(1.0f, 0.0f, 0.0f)) * Rt3D(std::stof(tokens[6]), Dir3D(0.0f, 0.0f, 1.0f)),
                     std::max(std::stof(tokens[7]), std::max(std::stof(tokens[8]), std::stof(tokens[9])))
                 );
             }
@@ -108,7 +108,7 @@ namespace BallTrack
                 primitive = CollisionPrimitive::CreateRectangle(
                     entity.get(),
                     Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])),
-                    Rt3D(std::stof(tokens[4]), Dir3D(1.0f, 0.0f, 0.0f)) * Rt3D(std::stof(tokens[5]), Dir3D(0.0f, 1.0f, 0.0f)) * Rt3D(std::stof(tokens[6]), Dir3D(0.0f, 0.0f, 1.0f)),
+                    Rt3D(std::stof(tokens[5]), Dir3D(0.0f, 1.0f, 0.0f)) * Rt3D(std::stof(tokens[4]), Dir3D(1.0f, 0.0f, 0.0f)) * Rt3D(std::stof(tokens[6]), Dir3D(0.0f, 0.0f, 1.0f)),
                     {std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9])}
                 );
             }

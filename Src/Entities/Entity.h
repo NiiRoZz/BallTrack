@@ -28,6 +28,8 @@ namespace BallTrack
 
         TG3D getModelMatrix() const;
 
+        Model3D& getModel3D();
+
     protected:
         Pos3D m_Position;
         Sc3D m_Scale;

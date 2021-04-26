@@ -19,8 +19,8 @@ namespace BallTrack
     std::unique_ptr<CollisionPrimitive> CollisionPrimitive::CreateRectangle(Entity* parent, const Pos3D& pos, const Rt3D& rt, const Vector3& size)
     {
         auto result = std::make_unique<RectangleCollisionPrimitive>(parent);
-        result->setPosition(pos);
         result->setRotation(rt);
+        result->setPosition(pos);
         result->setSize(size);
 
         return result;
