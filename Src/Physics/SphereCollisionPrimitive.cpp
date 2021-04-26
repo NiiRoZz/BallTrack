@@ -16,9 +16,9 @@ namespace BallTrack
     {
     }
 
-    void SphereCollisionPrimitive::render(const TG3D& viewProjection, const TG3D& parentMat)
+    void SphereCollisionPrimitive::render(const TG3D& parentMat)
     {
-        const TG3D MVP = viewProjection * (parentMat * getModelMatrix());
+        const TG3D modelMat = parentMat * getModelMatrix();
 
         float r = getMaximumRadius();
         int nParal = 20;
@@ -35,7 +35,7 @@ namespace BallTrack
                 pos.x = (float) (r*std::cos(i)*std::sin(j));
                 pos.z = (float) (r*std::sin(i)*std::sin(j));
 
-                CH3D newPos = pos * MVP;
+                CH3D newPos = pos * modelMat;
                 glVertex3f(newPos.x, newPos.y, newPos.z);
             }
             glEnd();
@@ -50,7 +50,7 @@ namespace BallTrack
                 pos.y = (float) (r*std::cos(i));
                 pos.z = (float) (r*std::sin(j)*std::sin(i));
                 
-                CH3D newPos = pos * MVP;
+                CH3D newPos = pos * modelMat;
                 glVertex3f(newPos.x, newPos.y, newPos.z);
             }
             glEnd();

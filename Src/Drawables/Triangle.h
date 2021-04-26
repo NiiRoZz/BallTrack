@@ -24,7 +24,7 @@ namespace BallTrack
         Triangle(void);
         Triangle(const std::vector<Vertex>& vertices);
         
-        virtual void render(const TG3D& viewProjection, const TG3D& parentMat = TG3D()) override;
+        virtual void render(const TG3D& parentMat = TG3D()) override;
 
         const std::array<Vertex, 3>& getVertices();
 

@@ -15,9 +15,9 @@ namespace BallTrack
     {
     }
 
-    void RectangleCollisionPrimitive::render(const TG3D& viewProjection, const TG3D& parentMat)
+    void RectangleCollisionPrimitive::render(const TG3D& parentMat)
     {
-        const TG3D MVP = viewProjection * (parentMat * getModelMatrix());
+        const TG3D modelMat = parentMat * getModelMatrix();
 
         //Pos3D sizeRectangle = getScaledSize();
 
@@ -51,9 +51,9 @@ namespace BallTrack
         {
             glBegin(GL_LINES);
 
-            CH3D firstVertex = v[f[i][0] - 1] * MVP;
-            CH3D secondVertex = v[f[i][1] - 1] * MVP;
-            CH3D thirdVertex = v[f[i][2] - 1] * MVP;
+            CH3D firstVertex = v[f[i][0] - 1] * modelMat;
+            CH3D secondVertex = v[f[i][1] - 1] * modelMat;
+            CH3D thirdVertex = v[f[i][2] - 1] * modelMat;
             
             glVertex3f(firstVertex.x, firstVertex.y, firstVertex.z);
             glVertex3f(secondVertex.x, secondVertex.y, secondVertex.z);

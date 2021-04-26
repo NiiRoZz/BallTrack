@@ -15,19 +15,19 @@ namespace BallTrack
 
     }
 
-    void PhysicEntity::render(const TG3D& viewProjection, const TG3D& parentMat)
+    void PhysicEntity::render(const TG3D& parentMat)
     {
         TG3D modelMatrix = parentMat * getModelMatrix();
 
-        m_Model3D.render(viewProjection, modelMatrix);
+        m_Model3D.render(modelMatrix);
 
         if (true)
         {
             glBindTexture(GL_TEXTURE_2D, 0);
-            
+
             for (auto& primitive: m_CollisionPrimitives)
             {
-                primitive->render(viewProjection, modelMatrix);
+                primitive->render(modelMatrix);
             }
         }
     }

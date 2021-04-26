@@ -30,15 +30,14 @@ namespace BallTrack
         }
     }
 
-    void Triangle::render(const TG3D& viewProjection, const TG3D& parentMat)
+    void Triangle::render(const TG3D& parentMat)
     {
         const TG3D normalMatrix = parentMat.transpose().invert();
-        const TG3D MVP = viewProjection * parentMat;
 
         glBegin(GL_TRIANGLES);
         for (const Vertex& vertex: m_Vertices)
         {
-            CH3D newPos = vertex.position * MVP;
+            CH3D newPos = vertex.position * parentMat;
             Dir3D newNormal = vertex.normal * normalMatrix;
             newNormal = newNormal.normalize();
 

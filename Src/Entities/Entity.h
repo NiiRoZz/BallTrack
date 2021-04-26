@@ -15,7 +15,7 @@ namespace BallTrack
         Entity(void) = default;
         Entity(const Model3D& model);
 
-        virtual void render(const TG3D& viewProjection, const TG3D& parentMat = TG3D()) override;
+        virtual void render(const TG3D& parentMat = TG3D()) override;
 
         const Sc3D& getScale() const;
         void setScale(const Sc3D& scale);
