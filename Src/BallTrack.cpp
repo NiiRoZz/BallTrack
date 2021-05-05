@@ -35,11 +35,8 @@ static float rz = 0.0F;
 
 static int oldTime;
 
-static const unsigned int TARGET_UPDATE_FPMS = 16;
-
 static PhysicEntity* bille = nullptr;
 static const Pos3D DefaultCameraPos = Pos3D(1500.0f, 1000.0f, 500.0f);
-
 
 //60 FPS
 static const unsigned int TARGET_UPDATE_FPMS = 16;
