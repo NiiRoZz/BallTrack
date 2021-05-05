@@ -30,7 +30,7 @@ namespace BallTrack
         return m_textureID;
     }
 
-    void Model3D::render(const TG3D& viewProjection, const TG3D& parentMat)
+    void Model3D::render(const TG3D& parentMat)
     {
         if (m_Triangles.size() <= 0) return;
 
@@ -38,7 +38,7 @@ namespace BallTrack
 
         for (Triangle& triangle: m_Triangles)
         {
-            triangle.render(viewProjection, parentMat);
+            triangle.render(parentMat);
         }
     }
 }

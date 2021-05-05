@@ -18,7 +18,7 @@ namespace BallTrack
         PhysicEntity(void);
         PhysicEntity(const Model3D& model, bool _static);
 
-        virtual void render(const TG3D& viewProjection, const TG3D& parentMat = TG3D()) override;
+        virtual void render(const TG3D& parentMat = TG3D()) override;
 
         void addCollisionPrimitive(std::unique_ptr<CollisionPrimitive>&& primitive);
 

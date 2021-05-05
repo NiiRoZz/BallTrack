@@ -17,7 +17,6 @@
 #include "Utils/ObjLoader.h"
 #include "Entities/Entity.h"
 #include "Entities/PhysicEntity.h"
-#include "Camera/Camera.h"
 
 #include <cassert>
 
@@ -49,11 +48,6 @@ float x = 0.0f, z = 5.0f;
 float fraction = 0.1f;
 */
 
-static TG3D projectionMatrix;
-static const Pos3D DefaultCameraPos = Pos3D(0.0f, 0.0f, 300.0f);
-static Camera camera(DefaultCameraPos, Pos3D(0.f, 0.f, 0.f), Dir3D(0.f, 1.f, 0.f));
-static PhysicEntity* bille = nullptr;
-
 //60 FPS
 //We make it a little bit slower than 16, because GLUT only use int and milliseconds, so we cannot say the real 60 FPS, so it will be 16 frames per second
 static const float TARGET_UPDATE_FPS = 0.015989f;
@@ -79,7 +73,7 @@ namespace BallTrack
 		return result;
 	}*/
 
-	static TG3D ortho(
+	/*static TG3D ortho(
 		const float left,
 		const float right,
 		const float bottom,
@@ -95,7 +89,7 @@ namespace BallTrack
 		result.mat[1][3] = -(top + bottom) / (top - bottom);
 		result.mat[2][3] = -(zFar + zNear) / (zFar - zNear);
 		return result;
-	}
+	}*/
 
 }
 
@@ -120,24 +114,22 @@ static void reshape(int wx, int wy) {
 	glLoadIdentity();
 	double ratio = (double)wx / wy;
 	if (wx > wy)
-		projectionMatrix = BallTrack::ortho(-ratio * 10, ratio * 10, -1.0 * 10, 1.0 * 10, 0.001f, 50000);
+		glOrtho(-ratio * 10, ratio * 10, -1.0 * 10, 1.0 * 10, 0.001f, 50000);
 	else
-		projectionMatrix = BallTrack::ortho(-1.0 * 10, 1.0 * 10, -1.0 / (ratio * 10), 1.0 / (ratio * 10), 0.0001f, 50000);
+		glOrtho(-1.0 * 10, 1.0 * 10, -1.0 / (ratio * 10), 1.0 / (ratio * 10), 0.0001f, 50000);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	gluLookAt(20.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
 }
 
 static void scene(void) {
 	glPushMatrix();
 
-	Rt3D rot = Rt3D(ry, Dir3D(0.0f, 1.0f, 0.f)) * Rt3D(rx, Dir3D(1.0f, 0.0f, 0.f)) * Rt3D(rz, Dir3D(0.0f, 0.0f, 1.f));
-	TG3D viewProjection = projectionMatrix * camera.getViewMatrix();
-
 	for (auto& entity : allEntities)
 	{
-		entity->setRotation(rot);
-		entity->render(viewProjection);
+		entity->render(TG3D());
 	}
 
 	glPopMatrix();
@@ -148,9 +140,13 @@ static void display(void)
 	glClearColor(0.5F, 0.5F, 0.5F, 0.5F);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPolygonMode(GL_FRONT_AND_BACK, (pMode == true) ? GL_FILL : GL_LINE);
+	glPushMatrix();
+	glRotatef(rx, 1.f, 0.f, 0.f);
+	glRotatef(ry, 0.f, 1.f, 0.f);
+	glRotatef(rz, 0.f, 0.f, 1.f);
 	scene();
+	glPopMatrix();
 	glFlush();
-	glLoadIdentity();
 	glutSwapBuffers();
 	int error = glGetError();
 	if (error != GL_NO_ERROR)
@@ -232,27 +228,27 @@ static void keyboard(unsigned char key, int , int )
 static void special(int specialKey, int , int ) {
 	switch (specialKey) {
 	case GLUT_KEY_RIGHT:
-		ry += 0.1F;
+		ry += 2.0F;
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_LEFT:
-		ry -= 0.1F;
+		ry -= 2.0F;
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_UP:
-		rx += 0.1F;
+		rx += 2.0F;
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_DOWN:
-		rx -= 0.1F;
+		rx -= 2.0F;
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_F1:
-		rz += 0.1F;
+		rz += 2.0F;
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_F2:
-		rz -= 0.1F;
+		rz -= 2.0F;
 		glutPostRedisplay();
 		break;
 	}
@@ -308,11 +304,11 @@ static void updateEntities(int )
 		}*/
 	}
 
-	if (bille != nullptr)
+	/*if (bille != nullptr)
 	{
 		camera.setPosition(bille->getPosition() + DefaultCameraPos);
 		camera.setCenter(bille->getPosition());
-	}
+	}*/
 
 	glutPostRedisplay();
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
@@ -343,6 +339,15 @@ int main(int argc, char** argv)
 	}
 
 	{
+		auto cube = ObjLoader::loadEntity("../data/BallTrack/models/", "cube");
+		assert(cube.get());
+		cube->setPosition(Pos3D(0.0f, 0.f, 0.f));
+		cube->setRotation(Rt3D(-0.9772078990936279f, Dir3D(1.0f, 0.f, 0.f)));
+		cube->setScale(Sc3D(3.669999837875366f, 14.5f, -0.5199999213218689f));
+		allEntities.push_back(std::move(cube));
+	}
+
+	{
 		auto circuit = ObjLoader::loadEntity("../data/BallTrack/models/", "circuit_test_1");
 		assert(circuit.get());
 		circuit->setStatic(true);
@@ -356,7 +361,6 @@ int main(int argc, char** argv)
 		assert(sphere.get());
 		sphere->setPosition(Pos3D(0.0f, 5.9f, 0.5f));
 		sphere->setScale(Sc3D(1.f));
-		bille = sphere.get();
 		allEntities.push_back(std::move(sphere));
 	}
 

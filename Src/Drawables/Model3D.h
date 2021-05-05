@@ -23,7 +23,7 @@ namespace BallTrack
         void setTextureID(GLuint textureID);
         GLuint getTextureID() const;
 
-        virtual void render(const TG3D& viewProjection, const TG3D& parentMat = TG3D()) override;
+        virtual void render(const TG3D& parentMat = TG3D()) override;
 
     protected:
         std::vector<Triangle> m_Triangles;

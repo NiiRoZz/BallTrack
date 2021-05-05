@@ -20,7 +20,7 @@ namespace BallTrack
     public:
         SphereCollisionPrimitive(Entity* parent);
 
-        virtual void render(const TG3D& viewProjection, const TG3D& parentMat = TG3D()) override;
+        virtual void render(const TG3D& parentMat = TG3D()) override;
 
         virtual bool resolveCollision(CollisionPrimitive* target) override;
 
