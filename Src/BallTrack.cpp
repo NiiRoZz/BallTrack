@@ -37,16 +37,9 @@ static int oldTime;
 
 static const unsigned int TARGET_UPDATE_FPMS = 16;
 
-//camera moving in x
-/*
-// angle of rotation for the camera direction
-float angle = 0.0;
-// actual vector representing the camera's direction
-float lx = 0.0f, lz = -1.0f;
-// XZ position of the camera
-float x = 0.0f, z = 5.0f;
-float fraction = 0.1f;
-*/
+static PhysicEntity* bille = nullptr;
+static const Pos3D DefaultCameraPos = Pos3D(1500.0f, 1000.0f, 500.0f);
+
 
 //60 FPS
 //We make it a little bit slower than 16, because GLUT only use int and milliseconds, so we cannot say the real 60 FPS, so it will be 16 frames per second
@@ -79,8 +72,6 @@ static void reshape(int wx, int wy) {
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-	gluLookAt(20.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
 }
 
 static void scene(void) {
@@ -100,6 +91,15 @@ static void display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glPolygonMode(GL_FRONT_AND_BACK, (pMode == true) ? GL_FILL : GL_LINE);
 	glPushMatrix();
+	if (bille != nullptr)
+	{
+		Pos3D setPosition = (bille->getPosition() + DefaultCameraPos);
+
+		gluLookAt(setPosition.x, setPosition.y, setPosition.z, bille->getPosition().x, bille->getPosition().y, bille->getPosition().z, 0.f, 1.f, 0.f);
+	}
+	else {
+		gluLookAt(20.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
+	}
 	glRotatef(rx, 1.f, 0.f, 0.f);
 	glRotatef(ry, 0.f, 1.f, 0.f);
 	glRotatef(rz, 0.f, 0.f, 1.f);
@@ -160,25 +160,7 @@ static void keyboard(unsigned char key, int , int )
 			glutPostRedisplay();
 		}
 		break;
-		/*
-		case 'v':
-			angle -= 0.01f;
-			lx = sin(angle);
-			lz = -cos(angle);
-			break;
-		case 'n':
-			angle += 0.01f;
-			lx = sin(angle);
-			lz = -cos(angle);
-			break;
-		case 'g':
-			x += lx * fraction;
-			z += lz * fraction;
-			break;
-		case 'b':
-			x -= lx * fraction;
-			z -= lz * fraction;
-			break;*/
+	
 	}
 	
 }
@@ -263,11 +245,7 @@ static void updateEntities(int )
 		}*/
 	}
 
-	/*if (bille != nullptr)
-	{
-		camera.setPosition(bille->getPosition() + DefaultCameraPos);
-		camera.setCenter(bille->getPosition());
-	}*/
+	
 
 	glutPostRedisplay();
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
@@ -314,12 +292,13 @@ int main(int argc, char** argv)
 		circuit->setScale(Sc3D(1.f, 1.f, 1.f));
 		allEntities.push_back(std::move(circuit));
 	}
-
+	
 	{
 		auto sphere = ObjLoader::loadEntity("../data/BallTrack/models/", "sphere");
 		assert(sphere.get());
 		sphere->setPosition(Pos3D(0.0f, 5.9f, 0.5f));
 		sphere->setScale(Sc3D(1.f));
+		bille = sphere.get();
 		allEntities.push_back(std::move(sphere));
 	}
 
