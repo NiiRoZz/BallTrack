@@ -27,6 +27,7 @@ std::vector<std::unique_ptr<Entity>> allEntities;
 float scale = 1.f;
 
 bool pMode = true;
+bool cameraMode = false;
 
 static float rx = 0.0F;            
 //static float sens = 1.0F;          
@@ -37,6 +38,7 @@ static int oldTime;
 
 static PhysicEntity* bille = nullptr;
 static const Pos3D DefaultCameraPos = Pos3D(1500.0f, 1000.0f, 500.0f);
+static const Pos3D CameraToBille = Pos3D(0.0f, 1000.0f, 500.0f);
 
 //60 FPS
 static const unsigned int TARGET_UPDATE_FPMS = 16;
@@ -91,9 +93,14 @@ static void display(void)
 	glPushMatrix();
 	if (bille != nullptr)
 	{
-		Pos3D setPosition = (bille->getPosition() + DefaultCameraPos);
-
-		gluLookAt(setPosition.x, setPosition.y, setPosition.z, bille->getPosition().x, bille->getPosition().y, bille->getPosition().z, 0.f, 1.f, 0.f);
+		if (!cameraMode) {
+			Pos3D setPosition = (bille->getPosition() + DefaultCameraPos);
+			gluLookAt(setPosition.x, setPosition.y, setPosition.z, bille->getPosition().x, bille->getPosition().y, bille->getPosition().z, 0.f, 1.f, 0.f);
+		}
+		else {
+			Pos3D setPosition = (bille->getPosition() + CameraToBille);
+			gluLookAt(setPosition.x, setPosition.y, setPosition.z, bille->getPosition().x, bille->getPosition().y, bille->getPosition().z, 0.f, 1.f, 0.f);
+		}
 	}
 	else {
 		gluLookAt(20.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
@@ -189,6 +196,9 @@ static void special(int specialKey, int , int ) {
 	case GLUT_KEY_F2:
 		rz -= 2.0F;
 		glutPostRedisplay();
+		break;
+	case GLUT_KEY_F3:
+		cameraMode = !cameraMode;
 		break;
 	}
 }
@@ -299,6 +309,8 @@ int main(int argc, char** argv)
 		bille = sphere.get();
 		allEntities.push_back(std::move(sphere));
 	}
+
+	
 
 	glutMainLoop();
 	return 0;
