@@ -17,7 +17,6 @@
 #include "Utils/ObjLoader.h"
 #include "Entities/Entity.h"
 #include "Entities/PhysicEntity.h"
-#include "Camera/Camera.h"
 
 #include <cassert>
 
@@ -48,11 +47,6 @@ float lx = 0.0f, lz = -1.0f;
 float x = 0.0f, z = 5.0f;
 float fraction = 0.1f;
 */
-
-static TG3D projectionMatrix;
-static const Pos3D DefaultCameraPos = Pos3D(0.0f, 0.0f, 300.0f);
-static Camera camera(DefaultCameraPos, Pos3D(0.f, 0.f, 0.f), Dir3D(0.f, 1.f, 0.f));
-static PhysicEntity* bille = nullptr;
 
 //60 FPS
 //We make it a little bit slower than 16, because GLUT only use int and milliseconds, so we cannot say the real 60 FPS, so it will be 16 frames per second
@@ -310,11 +304,11 @@ static void updateEntities(int )
 		}*/
 	}
 
-	if (bille != nullptr)
+	/*if (bille != nullptr)
 	{
 		camera.setPosition(bille->getPosition() + DefaultCameraPos);
 		camera.setCenter(bille->getPosition());
-	}
+	}*/
 
 	glutPostRedisplay();
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
@@ -367,7 +361,6 @@ int main(int argc, char** argv)
 		assert(sphere.get());
 		sphere->setPosition(Pos3D(0.0f, 5.9f, 0.5f));
 		sphere->setScale(Sc3D(1.f));
-		//bille = sphere.get();
 		allEntities.push_back(std::move(sphere));
 	}
 

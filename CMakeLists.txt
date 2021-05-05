@@ -43,7 +43,6 @@ add_executable (${PROJ}
   Src/Physics/SphereCollisionPrimitive.cpp
   Src/Entities/Entity.cpp
   Src/Entities/PhysicEntity.cpp
-  Src/Camera/Camera.cpp
 )
 
 target_link_libraries(${PROJ} 
