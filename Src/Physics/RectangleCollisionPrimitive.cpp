@@ -86,6 +86,24 @@ namespace BallTrack
         return false;
     }
 
+    void RectangleCollisionPrimitive::dynamicCollision(CollisionPrimitive* target)
+    {
+        SphereCollisionPrimitive* sphereCollision = dynamic_cast<SphereCollisionPrimitive*>(target);
+        if (sphereCollision != nullptr)
+        {
+            sphereCollision->resolveCollision((CollisionPrimitive*) this);
+            return;
+        }
+
+        RectangleCollisionPrimitive* rectangleCollision = dynamic_cast<RectangleCollisionPrimitive*>(target);
+        if (rectangleCollision != nullptr)
+        {
+            return;
+        }
+        
+        assert(false && "dynamicCollision function of RectangleCollisionPrimitive can't handle the target collision primitive type\n");
+    }
+
     TG3D RectangleCollisionPrimitive::getModelMatrix() const
     {
         return Tr3D(m_Position) * m_Rotation * Sc3D(m_Size.x, m_Size.y, m_Size.z);

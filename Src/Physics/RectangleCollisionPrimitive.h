@@ -14,6 +14,7 @@ namespace BallTrack
         virtual void render(const TG3D& parentMat = TG3D()) override;
 
         virtual bool resolveCollision(CollisionPrimitive* target) override;
+        virtual void dynamicCollision(CollisionPrimitive* target) override;
 
         virtual TG3D getModelMatrix() const;
 
