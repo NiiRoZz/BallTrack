@@ -52,47 +52,6 @@ float fraction = 0.1f;
 //We make it a little bit slower than 16, because GLUT only use int and milliseconds, so we cannot say the real 60 FPS, so it will be 16 frames per second
 static const float TARGET_UPDATE_FPS = 0.015989f;
 
-namespace BallTrack
-{
-	/*static TG3D perspective(const float fovy,
-		const float aspect,
-		const float zNear,
-		const float zFar) 
-	{
-		assert(aspect != 0.f);
-		assert(zFar != zNear);
-
-		const float rad = fovy;
-		const float tanHalfFovy = std::tan(rad / 2.f);
-		TG3D result(0.f);
-		result.mat[0][0] = 1.f / (aspect * tanHalfFovy);
-		result.mat[1][1] = 1.f / (tanHalfFovy);
-		result.mat[2][2] = -(zFar + zNear) / (zFar - zNear);
-		result.mat[3][2] = -1.f;
-		result.mat[2][3] = -(2.f * zFar * zNear) / (zFar - zNear);
-		return result;
-	}*/
-
-	/*static TG3D ortho(
-		const float left,
-		const float right,
-		const float bottom,
-		const float top,
-		const float zNear,
-		const float zFar)
-	{
-		TG3D result;
-		result.mat[0][0] = 2.f / (right - left);
-		result.mat[1][1] = 2.f / (top - bottom);
-		result.mat[2][2] = - 2.f / (zFar - zNear);
-		result.mat[0][3] = -(right + left) / (right - left);
-		result.mat[1][3] = -(top + bottom) / (top - bottom);
-		result.mat[2][3] = -(zFar + zNear) / (zFar - zNear);
-		return result;
-	}*/
-
-}
-
 static void init(void) {
 	const GLfloat shininess[] = { 50.0 };
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
