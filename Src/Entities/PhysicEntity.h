@@ -25,7 +25,7 @@ namespace BallTrack
         void update(float dtSeconds);
 
         bool resolveCollision(PhysicEntity* target);
-        //virtual void dynamicCollision(PhysicEntity* target) = 0;
+        void dynamicCollision(PhysicEntity* target);
 
         const Dir3D& getAcceleration() const;
 

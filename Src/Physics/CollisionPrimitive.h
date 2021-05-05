@@ -38,6 +38,7 @@ namespace BallTrack
         Pos3D getOffsetFromParent() const;
 
         virtual bool resolveCollision(CollisionPrimitive* target) = 0;
+        virtual void dynamicCollision(CollisionPrimitive* target) = 0;
 
     protected:
         Entity* m_Parent;

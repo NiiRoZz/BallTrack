@@ -19,7 +19,7 @@ namespace BallTrack
     {
         TG3D modelMatrix = parentMat * getModelMatrix();
 
-        m_Model3D.render(modelMatrix);
+        //m_Model3D.render(modelMatrix);
 
         if (true)
         {
@@ -71,6 +71,17 @@ namespace BallTrack
         }
         
         return result;
+    }
+
+    void PhysicEntity::dynamicCollision(PhysicEntity* target)
+    {
+        for (auto& primitive: m_CollisionPrimitives)
+        {
+            for (auto& primitiveTarget: target->m_CollisionPrimitives)
+            {
+                primitive->resolveCollision(primitiveTarget.get());
+            }
+        }
     }
 
     const Dir3D& PhysicEntity::getAcceleration() const

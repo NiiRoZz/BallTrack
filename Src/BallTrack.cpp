@@ -35,8 +35,6 @@ static float rz = 0.0F;
 
 static int oldTime;
 
-static const unsigned int TARGET_UPDATE_FPMS = 16;
-
 //camera moving in x
 /*
 // angle of rotation for the camera direction
@@ -49,6 +47,7 @@ float fraction = 0.1f;
 */
 
 //60 FPS
+static const unsigned int TARGET_UPDATE_FPMS = 16;
 //We make it a little bit slower than 16, because GLUT only use int and milliseconds, so we cannot say the real 60 FPS, so it will be 16 frames per second
 static const float TARGET_UPDATE_FPS = 0.015989f;
 
@@ -256,11 +255,11 @@ static void updateEntities(int )
 			}
 		}
 
-		// Now work out dynamic collisions
-		/*for (const auto& c : collidingPairs)
+		//Now work out dynamic collisions
+		for (const auto& c : collidingPairs)
 		{
 			c.first->dynamicCollision(c.second);
-		}*/
+		}
 	}
 
 	/*if (bille != nullptr)
@@ -301,8 +300,8 @@ int main(int argc, char** argv)
 		auto cube = ObjLoader::loadEntity("../data/BallTrack/models/", "cube");
 		assert(cube.get());
 		cube->setPosition(Pos3D(0.0f, 0.f, 0.f));
-		cube->setRotation(Rt3D(-0.9772078990936279f, Dir3D(1.0f, 0.f, 0.f)));
-		cube->setScale(Sc3D(3.669999837875366f, 14.5f, -0.5199999213218689f));
+		cube->setRotation(Rt3D(0.78539816339f, Dir3D(1.0f, 0.f, 0.f)));
+		cube->setScale(Sc3D(2.5f, 1.f, 14.0199999213218689f));
 		allEntities.push_back(std::move(cube));
 	}
 
@@ -318,7 +317,7 @@ int main(int argc, char** argv)
 	{
 		auto sphere = ObjLoader::loadEntity("../data/BallTrack/models/", "sphere");
 		assert(sphere.get());
-		sphere->setPosition(Pos3D(0.0f, 5.9f, 0.5f));
+		sphere->setPosition(Pos3D(0.0f, 10.9f, -5.f));
 		sphere->setScale(Sc3D(1.f));
 		allEntities.push_back(std::move(sphere));
 	}
