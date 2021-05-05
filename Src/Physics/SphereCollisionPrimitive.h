@@ -2,9 +2,13 @@
 #define _BALLTRACK_SPHERECOLLISIONPRIMITIVE_H
 
 #if defined(WIN32) || defined(WIN64)
-    #define NOMINMAX
+#define NOMINMAX
+#define _USE_MATH_DEFINES
+
 #endif
 
+
+#include <cmath>
 #include "Physics/CollisionPrimitive.h"
 
 namespace BallTrack
