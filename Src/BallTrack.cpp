@@ -88,7 +88,7 @@ static void scene(void) {
 
 	for (auto& entity : allEntities)
 	{
-		entity->render(TG3D());
+		entity->render();
 	}
 
 	glPopMatrix();
