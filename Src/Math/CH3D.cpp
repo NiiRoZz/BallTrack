@@ -73,4 +73,13 @@ namespace BallTrack
 
 		return *this;
 	}
+
+	CH3D& CH3D::operator-=(const float size)
+	{
+		x -= size;
+		y -= size;
+		z -= size;
+
+		return *this;
+	}
 }

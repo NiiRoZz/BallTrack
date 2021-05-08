@@ -8,10 +8,11 @@
 #include <cmath>
 
 #include "Physics/RectangleCollisionPrimitive.h"
+#include "Entities/PhysicEntity.h"
 
 namespace BallTrack
 {
-    SphereCollisionPrimitive::SphereCollisionPrimitive(Entity* parent)
+    SphereCollisionPrimitive::SphereCollisionPrimitive(PhysicEntity* parent)
     : CollisionPrimitive(parent)
     {
     }
@@ -104,25 +105,6 @@ namespace BallTrack
         return false;
     }
 
-    void SphereCollisionPrimitive::dynamicCollision(CollisionPrimitive* target)
-    {
-        SphereCollisionPrimitive* sphereCollision = dynamic_cast<SphereCollisionPrimitive*>(target);
-        if (sphereCollision != nullptr)
-        {
-            resolveDynamicCollision(sphereCollision);
-            return;
-        }
-
-        RectangleCollisionPrimitive* rectangleEntity = dynamic_cast<RectangleCollisionPrimitive*>(target);
-        if (rectangleEntity != nullptr)
-        {
-            resolveDynamicCollision(rectangleEntity);
-            return;
-        }
-
-        assert(false && "dynamicCollision function of SphereCollisionPrimitive can't handle the target collision primitive type\n");
-    }
-
     TG3D SphereCollisionPrimitive::getModelMatrix() const
     {
         return Tr3D(m_Position) * m_Rotation * Sc3D(getMaximumRadius());
@@ -151,10 +133,10 @@ namespace BallTrack
 
     bool SphereCollisionPrimitive::resolveCollision(SphereCollisionPrimitive* target)
     {
-        Entity* parent = getParent();
+        PhysicEntity* parent = getParent();
         if (parent == nullptr) return false;
 
-        Entity* parentTarget = target->getParent();
+        PhysicEntity* parentTarget = target->getParent();
         if (parentTarget == nullptr) return false;
 
         float sphereRadius = getMaximumRadius();
@@ -189,7 +171,7 @@ namespace BallTrack
 
     bool SphereCollisionPrimitive::resolveCollision(RectangleCollisionPrimitive* target)
     {
-        Entity* parent = getParent();
+        PhysicEntity* parent = getParent();
         if (parent == nullptr) return false;
 
         Pos3D diff = getOffsetFromParent();
@@ -218,58 +200,14 @@ namespace BallTrack
             Pos3D newPosSphere = posSphere * targetRotation;
             parent->setPosition(newPosSphere - diff);
 
+            //Dir3D parentVelocity = parent->getVelocity();
+            //parentVelocity -= fOverlap * (parentVelocity * vRayToNearest);
+
+            //parent->setVelocity(parentVelocity);
+
             return true;
         }
 
         return false;
-    }
-
-    void SphereCollisionPrimitive::resolveDynamicCollision(SphereCollisionPrimitive* target)
-    {
-        /*Pos3D spherePosition = getPosition();
-        Pos3D targetPosition = target->getPosition();
-
-        Dir3D sphereVelocity = getVelocity();
-        Dir3D targetVelocity = getVelocity();
-
-        float sphereMass = getMass();
-        float targetMass = target->getMass();
-
-        float fDistance = distance(target);
-
-        Dir3D normal = Dir3D(spherePosition, targetPosition) / fDistance;
-
-        // Tangent
-        float tx = -normal.y;
-        float ty = normal.x;
-        float tz = normal.z;
-
-        float dpTan1 = sphereVelocity.x * tx + sphereVelocity.y * ty + sphereVelocity.z * tz;
-		float dpTan2 = targetVelocity.x * tx + targetVelocity.y * ty + targetVelocity.z * tz;
-
-        float dpNorm1 = sphereVelocity.x * normal.x + sphereVelocity.y * normal.y + sphereVelocity.z * normal.z;
-		float dpNorm2 = targetVelocity.x * normal.x + targetVelocity.y * normal.y + targetVelocity.z * normal.z;
-
-        float m1 = (dpNorm1 * (sphereMass - targetMass) + 2.0f * targetMass * dpNorm2) / (sphereMass + targetMass);
-		float m2 = (dpNorm2 * (targetMass - sphereMass) + 2.0f * sphereMass * dpNorm1) / (sphereMass + targetMass);
-
-        sphereVelocity.x = tx * dpTan1 + normal.x * m1;
-        sphereVelocity.y = ty * dpTan1 + normal.y * m1;
-        sphereVelocity.z = tz * dpTan1 + normal.z * m1;
-        setVelocity(sphereVelocity);
-
-        targetVelocity.x = tx * dpTan2 + normal.x * m2;
-        targetVelocity.y = ty * dpTan2 + normal.y * m2;
-        targetVelocity.z = tz * dpTan2 + normal.z * m2;
-        target->setVelocity(targetVelocity);*/
-
-        (void) target;
-        std::cout << "dynamicCollision SphereEntity" << std::endl;
-    }
-
-    void SphereCollisionPrimitive::resolveDynamicCollision(RectangleCollisionPrimitive* target)
-    {
-        (void) target;
-        std::cout << "dynamicCollision RectangleEntity" << std::endl;
     }
 }

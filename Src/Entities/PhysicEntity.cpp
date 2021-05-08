@@ -73,17 +73,6 @@ namespace BallTrack
         return result;
     }
 
-    void PhysicEntity::dynamicCollision(PhysicEntity* target)
-    {
-        for (auto& primitive: m_CollisionPrimitives)
-        {
-            for (auto& primitiveTarget: target->m_CollisionPrimitives)
-            {
-                primitive->dynamicCollision(primitiveTarget.get());
-            }
-        }
-    }
-
     const Dir3D& PhysicEntity::getAcceleration() const
     {
         return m_Acceleration;

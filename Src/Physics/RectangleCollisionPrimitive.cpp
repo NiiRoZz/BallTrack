@@ -10,7 +10,7 @@
 
 namespace BallTrack
 {
-    RectangleCollisionPrimitive::RectangleCollisionPrimitive(Entity* parent)
+    RectangleCollisionPrimitive::RectangleCollisionPrimitive(PhysicEntity* parent)
     : CollisionPrimitive(parent)
     {
     }
@@ -84,24 +84,6 @@ namespace BallTrack
         
         assert(false && "resolveCollision function of RectangleCollisionPrimitive can't handle the target collision primitive type\n");
         return false;
-    }
-
-    void RectangleCollisionPrimitive::dynamicCollision(CollisionPrimitive* target)
-    {
-        SphereCollisionPrimitive* sphereCollision = dynamic_cast<SphereCollisionPrimitive*>(target);
-        if (sphereCollision != nullptr)
-        {
-            sphereCollision->dynamicCollision((CollisionPrimitive*) this);
-            return;
-        }
-
-        RectangleCollisionPrimitive* rectangleCollision = dynamic_cast<RectangleCollisionPrimitive*>(target);
-        if (rectangleCollision != nullptr)
-        {
-            return;
-        }
-        
-        assert(false && "dynamicCollision function of RectangleCollisionPrimitive can't handle the target collision primitive type\n");
     }
 
     TG3D RectangleCollisionPrimitive::getModelMatrix() const

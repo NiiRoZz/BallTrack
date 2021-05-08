@@ -1,12 +1,13 @@
 #include "CollisionPrimitive.h"
 
+#include "Entities/PhysicEntity.h"
 #include "Physics/SphereCollisionPrimitive.h"
 #include "Physics/RectangleCollisionPrimitive.h"
 #include "Math/Vector3.h"
 
 namespace BallTrack
 {
-    std::unique_ptr<CollisionPrimitive> CollisionPrimitive::CreateSphere(Entity* parent, const Pos3D& pos, const Rt3D& rt, float radius)
+    std::unique_ptr<CollisionPrimitive> CollisionPrimitive::CreateSphere(PhysicEntity* parent, const Pos3D& pos, const Rt3D& rt, float radius)
     {
         auto result = std::make_unique<SphereCollisionPrimitive>(parent);
         result->setPosition(pos);
@@ -16,7 +17,7 @@ namespace BallTrack
         return result;
     }
 
-    std::unique_ptr<CollisionPrimitive> CollisionPrimitive::CreateRectangle(Entity* parent, const Pos3D& pos, const Rt3D& rt, const Vector3& size)
+    std::unique_ptr<CollisionPrimitive> CollisionPrimitive::CreateRectangle(PhysicEntity* parent, const Pos3D& pos, const Rt3D& rt, const Vector3& size)
     {
         auto result = std::make_unique<RectangleCollisionPrimitive>(parent);
         result->setRotation(rt);
@@ -26,7 +27,7 @@ namespace BallTrack
         return result;
     }
 
-    CollisionPrimitive::CollisionPrimitive(Entity* parent)
+    CollisionPrimitive::CollisionPrimitive(PhysicEntity* parent)
     : m_Parent(parent)
     {
     }
@@ -56,7 +57,7 @@ namespace BallTrack
         m_Position = pos;
     }
 
-    Entity* CollisionPrimitive::getParent() const
+    PhysicEntity* CollisionPrimitive::getParent() const
     {
         return m_Parent;
     }

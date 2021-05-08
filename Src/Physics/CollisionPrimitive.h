@@ -17,11 +17,11 @@ namespace BallTrack
     class CollisionPrimitive: public Drawable
     {
     public:
-        static std::unique_ptr<CollisionPrimitive> CreateSphere(Entity* parent, const Pos3D& pos, const Rt3D& rt, float radius);
-        static std::unique_ptr<CollisionPrimitive> CreateRectangle(Entity* parent, const Pos3D& pos, const Rt3D& rt, const Vector3& size);
+        static std::unique_ptr<CollisionPrimitive> CreateSphere(PhysicEntity* parent, const Pos3D& pos, const Rt3D& rt, float radius);
+        static std::unique_ptr<CollisionPrimitive> CreateRectangle(PhysicEntity* parent, const Pos3D& pos, const Rt3D& rt, const Vector3& size);
 
     public:
-        CollisionPrimitive(Entity* parent);
+        CollisionPrimitive(PhysicEntity* parent);
 
         Sc3D getScale() const;
 
@@ -31,17 +31,16 @@ namespace BallTrack
         Pos3D getPosition() const;
         void setPosition(const Pos3D& pos);
 
-        Entity* getParent() const;
+        PhysicEntity* getParent() const;
 
         virtual TG3D getModelMatrix() const;
 
         Pos3D getOffsetFromParent() const;
 
         virtual bool resolveCollision(CollisionPrimitive* target) = 0;
-        virtual void dynamicCollision(CollisionPrimitive* target) = 0;
 
     protected:
-        Entity* m_Parent;
+        PhysicEntity* m_Parent;
 
         Pos3D m_Position;
         Rt3D m_Rotation;

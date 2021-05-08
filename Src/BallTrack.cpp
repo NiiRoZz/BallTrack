@@ -223,8 +223,7 @@ static void updateEntities(int )
 			}
 		}
 
-		//Update static collisions only physic entities
-		std::vector<std::pair<PhysicEntity*, PhysicEntity*>> collidingPairs;
+		//Update collisions
 		for (auto& entity: allEntities)
 		{
 			PhysicEntity* physicEntity = dynamic_cast<PhysicEntity*>(entity.get());
@@ -237,19 +236,13 @@ static void updateEntities(int )
 
 					if (physicTarget != nullptr)
 					{
-						if (physicEntity != physicTarget && physicEntity->resolveCollision(physicTarget))
+						if (physicEntity != physicTarget)
 						{
-							collidingPairs.emplace_back(physicEntity, physicTarget);
+							physicEntity->resolveCollision(physicTarget);
 						}
 					}
 				}
 			}
-		}
-
-		//Now work out dynamic collisions
-		for (const auto& c : collidingPairs)
-		{
-			c.first->dynamicCollision(c.second);
 		}
 	}
 

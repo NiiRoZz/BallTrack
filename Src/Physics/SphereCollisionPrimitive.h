@@ -18,12 +18,11 @@ namespace BallTrack
     class SphereCollisionPrimitive: public CollisionPrimitive
     {
     public:
-        SphereCollisionPrimitive(Entity* parent);
+        SphereCollisionPrimitive(PhysicEntity* parent);
 
         virtual void render(const TG3D& parentMat = TG3D()) override;
 
         virtual bool resolveCollision(CollisionPrimitive* target) override;
-        virtual void dynamicCollision(CollisionPrimitive* target) override;
 
         virtual TG3D getModelMatrix() const;
 
@@ -36,9 +35,6 @@ namespace BallTrack
     protected:
         bool resolveCollision(SphereCollisionPrimitive* target);
         bool resolveCollision(RectangleCollisionPrimitive* target);
-
-        void resolveDynamicCollision(SphereCollisionPrimitive* target);
-        void resolveDynamicCollision(RectangleCollisionPrimitive* target);
 
     protected:
         float m_Radius;
