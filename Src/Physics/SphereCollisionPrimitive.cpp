@@ -109,14 +109,14 @@ namespace BallTrack
         SphereCollisionPrimitive* sphereCollision = dynamic_cast<SphereCollisionPrimitive*>(target);
         if (sphereCollision != nullptr)
         {
-            //return resolveCollision(sphereCollision);
+            resolveDynamicCollision(sphereCollision);
             return;
         }
 
         RectangleCollisionPrimitive* rectangleEntity = dynamic_cast<RectangleCollisionPrimitive*>(target);
         if (rectangleEntity != nullptr)
         {
-            //return resolveCollision(rectangleEntity);
+            resolveDynamicCollision(rectangleEntity);
             return;
         }
 
@@ -224,9 +224,9 @@ namespace BallTrack
         return false;
     }
 
-    /*void SphereEntity::dynamicCollision(SphereEntity* target)
+    void SphereCollisionPrimitive::resolveDynamicCollision(SphereCollisionPrimitive* target)
     {
-        Pos3D spherePosition = getPosition();
+        /*Pos3D spherePosition = getPosition();
         Pos3D targetPosition = target->getPosition();
 
         Dir3D sphereVelocity = getVelocity();
@@ -261,14 +261,15 @@ namespace BallTrack
         targetVelocity.x = tx * dpTan2 + normal.x * m2;
         targetVelocity.y = ty * dpTan2 + normal.y * m2;
         targetVelocity.z = tz * dpTan2 + normal.z * m2;
-        target->setVelocity(targetVelocity);
+        target->setVelocity(targetVelocity);*/
 
+        (void) target;
         std::cout << "dynamicCollision SphereEntity" << std::endl;
     }
 
-    void SphereEntity::dynamicCollision(RectangleEntity* target)
+    void SphereCollisionPrimitive::resolveDynamicCollision(RectangleCollisionPrimitive* target)
     {
         (void) target;
         std::cout << "dynamicCollision RectangleEntity" << std::endl;
-    }*/
+    }
 }

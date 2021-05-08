@@ -91,7 +91,7 @@ namespace BallTrack
         SphereCollisionPrimitive* sphereCollision = dynamic_cast<SphereCollisionPrimitive*>(target);
         if (sphereCollision != nullptr)
         {
-            sphereCollision->resolveCollision((CollisionPrimitive*) this);
+            sphereCollision->dynamicCollision((CollisionPrimitive*) this);
             return;
         }
 

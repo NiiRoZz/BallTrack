@@ -37,6 +37,9 @@ namespace BallTrack
         bool resolveCollision(SphereCollisionPrimitive* target);
         bool resolveCollision(RectangleCollisionPrimitive* target);
 
+        void resolveDynamicCollision(SphereCollisionPrimitive* target);
+        void resolveDynamicCollision(RectangleCollisionPrimitive* target);
+
     protected:
         float m_Radius;
     };

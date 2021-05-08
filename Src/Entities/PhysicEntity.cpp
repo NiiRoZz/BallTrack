@@ -79,7 +79,7 @@ namespace BallTrack
         {
             for (auto& primitiveTarget: target->m_CollisionPrimitives)
             {
-                primitive->resolveCollision(primitiveTarget.get());
+                primitive->dynamicCollision(primitiveTarget.get());
             }
         }
     }
