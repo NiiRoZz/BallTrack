@@ -28,10 +28,13 @@ float scale = 1.f;
 
 bool pMode = true;
 bool cameraMode = false;
+bool showPrimitives = true;
 
-static float rx = 0.0F;            
+int f1, f2;
+
+static float rx = 0.0F;
 //static float sens = 1.0F;          
-static float ry = 0.0F;           
+static float ry = 0.0F;
 static float rz = 0.0F;
 
 static int oldTime;
@@ -79,7 +82,17 @@ static void scene(void) {
 
 	for (auto& entity : allEntities)
 	{
-		entity->render();
+		// showing the primitives of the physicEntities, or not
+		PhysicEntity* physicEntity = dynamic_cast<PhysicEntity*>(entity.get());
+
+		if (physicEntity != nullptr)
+		{
+			physicEntity->render(TG3D(), showPrimitives);
+		}
+		else // render the rest as usual
+		{
+			entity->render();
+		}
 	}
 
 	glPopMatrix();
@@ -116,62 +129,76 @@ static void display(void)
 	if (error != GL_NO_ERROR)
 		printf("Attention erreur %d\n", error);
 }
-static void keyboard(unsigned char key, int , int )
+static void keyboard(unsigned char key, int, int)
 {
 	switch (key)
 	{
-		case 'f':
-		case 'F':
+	case 'f':
+	case 'F':
+	{
+		static bool fullScreen = false;
+		static int tx;
+		static int ty;
+		static int px;
+		static int py;
+		fullScreen = !fullScreen;
+		if (fullScreen)
 		{
-			static bool fullScreen = false;
-			static int tx;
-			static int ty;
-			static int px;
-			static int py;
-			fullScreen = !fullScreen;
-			if (fullScreen)
-			{
-				px = glutGet(GLUT_WINDOW_X);
-				py = glutGet(GLUT_WINDOW_Y);
-				tx = glutGet(GLUT_WINDOW_WIDTH);
-				ty = glutGet(GLUT_WINDOW_HEIGHT);
-				glutFullScreen();
-			}
-			else
-			{
-				glutPositionWindow(px, py);
-				glutReshapeWindow(tx, ty);
-			}
+			glutSetWindow(f1);
+			px = glutGet(GLUT_WINDOW_X);
+			py = glutGet(GLUT_WINDOW_Y);
+			tx = glutGet(GLUT_WINDOW_WIDTH);
+			ty = glutGet(GLUT_WINDOW_HEIGHT);
+			glutFullScreen();
 		}
-		break;
-
-		case 'z':
-		{ 
-			pMode = !pMode;
-			glutPostRedisplay();
-		}
-		break;
-
-		case 'o':
+		else
 		{
-			scale -= 0.1f;
-			glutPostRedisplay();
+			glutPositionWindow(px, py);
+			glutReshapeWindow(tx, ty);
 		}
-		break;
-
-		case 'p':
-		{
-			scale += 0.1f;
-			glutPostRedisplay();
-		}
-		break;
-	
 	}
-	
+	break;
+
+	case 'z':
+	{
+		pMode = !pMode;
+		glutSetWindow(f1);
+		glutPostRedisplay();
+		glutSetWindow(f2);
+		glutPostRedisplay();
+	}
+	break;
+
+	case 'a':
+	{
+		showPrimitives = !showPrimitives;
+		glutSetWindow(f1);
+		glutPostRedisplay();
+		glutSetWindow(f2);
+		glutPostRedisplay();
+	}
+	break;
+
+	case 'o':
+	{
+		scale -= 0.1f;
+		glutPostRedisplay();
+	}
+	break;
+
+	case 'p':
+	{
+		scale += 0.1f;
+		glutPostRedisplay();
+	}
+	break;
+
+	}
+
 }
 
 
-static void special(int specialKey, int , int ) {
+static void special(int specialKey, int, int) {
 	switch (specialKey) {
 	case GLUT_KEY_RIGHT:
 		ry += 2.0F;
@@ -199,11 +226,15 @@ static void special(int specialKey, int , int ) {
 		break;
 	case GLUT_KEY_F3:
 		cameraMode = !cameraMode;
+		glutSetWindow(f1);
+		glutPostRedisplay();
+		glutSetWindow(f2);
+		glutPostRedisplay();
 		break;
 	}
 }
 
-static void updateEntities(int )
+static void updateEntities(int)
 {
 	int t = glutGet(GLUT_ELAPSED_TIME);
 	float dtSeconds = (t - oldTime) / 1000.f;
@@ -213,7 +244,7 @@ static void updateEntities(int )
 	for (float i = dtSeconds; i >= TARGET_UPDATE_FPS; i -= TARGET_UPDATE_FPS)
 	{
 		//Update position entity from velocity, only physic entities
-		for (auto& entity: allEntities)
+		for (auto& entity : allEntities)
 		{
 			PhysicEntity* physicEntity = dynamic_cast<PhysicEntity*>(entity.get());
 
@@ -224,13 +255,13 @@ static void updateEntities(int )
 		}
 
 		//Update collisions
-		for (auto& entity: allEntities)
+		for (auto& entity : allEntities)
 		{
 			PhysicEntity* physicEntity = dynamic_cast<PhysicEntity*>(entity.get());
 
 			if (physicEntity != nullptr)
 			{
-				for (auto& target: allEntities)
+				for (auto& target : allEntities)
 				{
 					PhysicEntity* physicTarget = dynamic_cast<PhysicEntity*>(target.get());
 
@@ -246,12 +277,54 @@ static void updateEntities(int )
 		}
 	}
 
-	
+
 
 	glutPostRedisplay();
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
 }
 
+void printText(int x, int y, std::string string)
+{
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glRasterPos2f(x, y);
+	for (auto c : string)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+	}
+}
+
+static void display2(void)
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+	auto stringFullScreen = std::string("'F' to toggle full screen display");
+	auto stringWireFrame = std::string("'Z' to toggle wire frame display : ");
+	stringWireFrame.append((pMode ? "on" : "off"));
+	auto stringPrimitives = std::string("'A' to toggle primitives display : ");
+	stringPrimitives.append((showPrimitives ? "on" : "off"));
+	auto stringCamera = std::string("'F3' to switch camera mode : ");
+	stringCamera.append((cameraMode ? "3rd person" : "1st person"));
+
+	printText(24, 40, stringFullScreen);
+	printText(24, 80, stringWireFrame);
+	printText(24, 120, stringPrimitives);
+	printText(24, 160, stringCamera);
+
+	glutSwapBuffers();
+	int error = glGetError();
+	if (error != GL_NO_ERROR)
+		printf("Attention erreur %d\n", error);
+}
+
+void reshape2(int w, int h)
+{
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0, w, h, 0);
+	glMatrixMode(GL_MODELVIEW);
+}
 
 int main(int argc, char** argv)
 {
@@ -259,7 +332,7 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
 	glutInitWindowSize(800, 600);
 	glutInitWindowPosition(50, 50);
-	glutCreateWindow("BallTrack");
+	f1 = glutCreateWindow("BallTrack");
 	init();
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(special);
@@ -293,7 +366,7 @@ int main(int argc, char** argv)
 		circuit->setScale(Sc3D(1.f, 1.f, 1.f));
 		allEntities.push_back(std::move(circuit));
 	}
-	
+
 	{
 		auto sphere = ObjLoader::loadEntity("../data/BallTrack/models/", "sphere");
 		assert(sphere.get());
@@ -303,7 +376,13 @@ int main(int argc, char** argv)
 		allEntities.push_back(std::move(sphere));
 	}
 
-	
+	glutInitWindowSize(500, 190);
+	glutInitWindowPosition(900, 50);
+	f2 = glutCreateWindow("Settings");
+	glutKeyboardFunc(keyboard);
+	glutSpecialFunc(special);
+	glutDisplayFunc(display2);
+	glutReshapeFunc(reshape2);
 
 	glutMainLoop();
 	return 0;
