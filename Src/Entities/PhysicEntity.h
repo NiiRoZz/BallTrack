@@ -20,7 +20,7 @@ namespace BallTrack
 
         //virtual void render(const TG3D& parentMat = TG3D()) override;
 
-        virtual void render(const TG3D& parentMat = TG3D(), bool showPrimitives = true);
+        virtual void render(const TG3D& parentMat = TG3D());
 
         void addCollisionPrimitive(std::unique_ptr<CollisionPrimitive>&& primitive);
 

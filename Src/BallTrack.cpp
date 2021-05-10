@@ -87,7 +87,7 @@ static void scene(void) {
 
 		if (physicEntity != nullptr)
 		{
-			physicEntity->render(TG3D(), showPrimitives);
+			physicEntity->render(TG3D());
 		}
 		else // render the rest as usual
 		{
