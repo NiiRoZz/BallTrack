@@ -274,16 +274,16 @@ static void updateEntities(int)
 							if (physicEntity != physicTarget)
 							{
 								physicEntity->resolveCollision(physicTarget);
+
+								if (!physicEntity->isStatic() && physicEntity->getPosition().y < RestartY)
+								{
+									physicEntity->setPosition(StartPosition);
+								}
 							}
 						}
 					}
 				}
 			}
-		}
-
-		if (bille != nullptr && bille->getPosition().y < RestartY)
-		{
-			bille->setPosition(StartPosition);
 		}
 
 		glutPostRedisplay();
@@ -368,6 +368,46 @@ int main(int argc, char** argv)
 		sphere->setPosition(StartPosition);
 		sphere->setScale(Sc3D(1.f));
 		bille = sphere.get();
+		allEntities.push_back(std::move(sphere));
+	}
+
+	{
+		auto sphere = ObjLoader::loadEntity("../data/BallTrack/models/", "sphere");
+		assert(sphere.get());
+		sphere->setPosition(StartPosition + Pos3D(0.f, 2.f, 0.f));
+		sphere->setScale(Sc3D(1.f));
+		allEntities.push_back(std::move(sphere));
+	}
+
+	{
+		auto sphere = ObjLoader::loadEntity("../data/BallTrack/models/", "sphere");
+		assert(sphere.get());
+		sphere->setPosition(StartPosition + Pos3D(0.f, 10.f, 0.f));
+		sphere->setScale(Sc3D(1.f));
+		allEntities.push_back(std::move(sphere));
+	}
+
+	{
+		auto sphere = ObjLoader::loadEntity("../data/BallTrack/models/", "sphere");
+		assert(sphere.get());
+		sphere->setPosition(StartPosition + Pos3D(0.f, 0.f, -2.f));
+		sphere->setScale(Sc3D(1.f));
+		allEntities.push_back(std::move(sphere));
+	}
+
+	{
+		auto sphere = ObjLoader::loadEntity("../data/BallTrack/models/", "sphere");
+		assert(sphere.get());
+		sphere->setPosition(StartPosition + Pos3D(0.f, 2.f, -2.f));
+		sphere->setScale(Sc3D(1.f));
+		allEntities.push_back(std::move(sphere));
+	}
+
+	{
+		auto sphere = ObjLoader::loadEntity("../data/BallTrack/models/", "sphere");
+		assert(sphere.get());
+		sphere->setPosition(StartPosition + Pos3D(0.f, 10.f, -2.f));
+		sphere->setScale(Sc3D(1.f));
 		allEntities.push_back(std::move(sphere));
 	}
 
