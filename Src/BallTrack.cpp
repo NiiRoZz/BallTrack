@@ -111,9 +111,11 @@ static void display(void)
 	else {
 		gluLookAt(20.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f);
 	}
-	glRotatef(rx, 1.f, 0.f, 0.f);
-	glRotatef(ry, 0.f, 1.f, 0.f);
-	glRotatef(rz, 0.f, 0.f, 1.f);
+	
+	//glRotatef(rx, 1.f, 0.f, 0.f);
+	//glRotatef(ry, 0.f, 1.f, 0.f);
+	//glRotatef(rz, 0.f, 0.f, 1.f);
+	
 	scene();
 	glPopMatrix();
 	glFlush();
