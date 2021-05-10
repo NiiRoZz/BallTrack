@@ -37,9 +37,11 @@ static float rz = 0.0F;
 
 static int oldTime;
 
+static bool updatePhysic = true;
+
 static PhysicEntity* bille = nullptr;
 static const Pos3D DefaultCameraPos = Pos3D(1500.0f, 1000.0f, 500.0f);
-static const Pos3D CameraToBille = Pos3D(0.0f, 1000.0f, 500.0f);
+static const Pos3D CameraToBille = Pos3D(0.0f, 0.0f, -500.0f);
 
 //60 FPS
 static const unsigned int TARGET_UPDATE_FPMS = 16;
@@ -100,7 +102,7 @@ static void display(void)
 		}
 		else {
 			Pos3D setPosition = (bille->getPosition() + CameraToBille);
-			gluLookAt(setPosition.x, setPosition.y, setPosition.z, bille->getPosition().x, bille->getPosition().y, bille->getPosition().z, 0.f, 1.f, 0.f);
+			gluLookAt(bille->getPosition().x, bille->getPosition().y, bille->getPosition().z, setPosition.x, setPosition.y, setPosition.z, 0.f, 1.f, 0.f);
 		}
 	}
 	else {
@@ -148,6 +150,7 @@ static void keyboard(unsigned char key, int, int)
 	break;
 
 	case 'z':
+	case 'Z':
 	{
 		pMode = !pMode;
 
@@ -160,6 +163,7 @@ static void keyboard(unsigned char key, int, int)
 	break;
 
 	case 'a':
+	case 'A':
 	{
 		showPrimitives = !showPrimitives;
 
@@ -170,6 +174,20 @@ static void keyboard(unsigned char key, int, int)
 		glutSetWindow(currWindow);
 	}
 	break;
+
+	case 'g':
+	case 'G':
+	{
+		updatePhysic = !updatePhysic;
+
+		int currWindow = glutGetWindow();
+		glutPostRedisplay();
+		glutSetWindow((currWindow == f1) ? f2 : f1);
+		glutPostRedisplay();
+		glutSetWindow(currWindow);
+	}
+	break;
+
 	}
 
 }
@@ -221,46 +239,48 @@ static void updateEntities(int)
 	float dtSeconds = (t - oldTime) / 1000.f;
 	oldTime = t;
 
-	//Just to be sure physics is updated the number of time needed per frame
-	for (float i = dtSeconds; i >= TARGET_UPDATE_FPS; i -= TARGET_UPDATE_FPS)
+	if (updatePhysic)
 	{
-		//Update position entity from velocity, only physic entities
-		for (auto& entity : allEntities)
+		//Just to be sure physics is updated the number of time needed per frame
+		for (float i = dtSeconds; i >= TARGET_UPDATE_FPS; i -= TARGET_UPDATE_FPS)
 		{
-			PhysicEntity* physicEntity = dynamic_cast<PhysicEntity*>(entity.get());
-
-			if (physicEntity != nullptr)
+			//Update position entity from velocity, only physic entities
+			for (auto& entity : allEntities)
 			{
-				physicEntity->update(TARGET_UPDATE_FPS);
-			}
-		}
+				PhysicEntity* physicEntity = dynamic_cast<PhysicEntity*>(entity.get());
 
-		//Update collisions
-		for (auto& entity : allEntities)
-		{
-			PhysicEntity* physicEntity = dynamic_cast<PhysicEntity*>(entity.get());
-
-			if (physicEntity != nullptr)
-			{
-				for (auto& target : allEntities)
+				if (physicEntity != nullptr)
 				{
-					PhysicEntity* physicTarget = dynamic_cast<PhysicEntity*>(target.get());
+					physicEntity->update(TARGET_UPDATE_FPS);
+				}
+			}
 
-					if (physicTarget != nullptr)
+			//Update collisions
+			for (auto& entity : allEntities)
+			{
+				PhysicEntity* physicEntity = dynamic_cast<PhysicEntity*>(entity.get());
+
+				if (physicEntity != nullptr)
+				{
+					for (auto& target : allEntities)
 					{
-						if (physicEntity != physicTarget)
+						PhysicEntity* physicTarget = dynamic_cast<PhysicEntity*>(target.get());
+
+						if (physicTarget != nullptr)
 						{
-							physicEntity->resolveCollision(physicTarget);
+							if (physicEntity != physicTarget)
+							{
+								physicEntity->resolveCollision(physicTarget);
+							}
 						}
 					}
 				}
 			}
 		}
+
+		glutPostRedisplay();
 	}
 
-
-
-	glutPostRedisplay();
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
 }
 
@@ -286,11 +306,14 @@ static void display2(void)
 	stringPrimitives.append((showPrimitives ? "on" : "off"));
 	auto stringCamera = std::string("'F3' to switch camera mode : ");
 	stringCamera.append((cameraMode ? "3rd person" : "1st person"));
+	auto stringUpdatePhysic = std::string("'G' to toggle the physic : ");
+	stringUpdatePhysic.append((updatePhysic ? "on" : "off"));
 
 	printText(24, 40, stringFullScreen);
 	printText(24, 80, stringWireFrame);
 	printText(24, 120, stringPrimitives);
 	printText(24, 160, stringCamera);
+	printText(24, 200, stringUpdatePhysic);
 
 	glutSwapBuffers();
 	int error = glGetError();
@@ -322,14 +345,6 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
 
-	/*{
-		auto cube = ObjLoader::loadEntity("../data/BallTrack/models/", "cube");
-		assert(cube.get());
-		cube->setPosition(Pos3D(0.0f, 0.f, 0.f));
-		cube->setScale(Sc3D(10.f, 1.f, 10.f));
-		allEntities.push_back(std::move(cube));
-	}*/
-
 	{
 		auto circuit = ObjLoader::loadEntity("../data/BallTrack/models/", "circuit_test_1");
 		assert(circuit.get());
@@ -348,15 +363,13 @@ int main(int argc, char** argv)
 		allEntities.push_back(std::move(sphere));
 	}
 
-	glutInitWindowSize(500, 190);
+	glutInitWindowSize(500, 230);
 	glutInitWindowPosition(900, 50);
 	f2 = glutCreateWindow("Settings");
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(special);
 	glutDisplayFunc(display2);
 	glutReshapeFunc(reshape2);
-
-	glutSetWindow(f1);
 
 	glutMainLoop();
 	return 0;
