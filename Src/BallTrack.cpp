@@ -82,17 +82,7 @@ static void scene(void) {
 
 	for (auto& entity : allEntities)
 	{
-		// showing the primitives of the physicEntities, or not
-		PhysicEntity* physicEntity = dynamic_cast<PhysicEntity*>(entity.get());
-
-		if (physicEntity != nullptr)
-		{
-			physicEntity->render(TG3D());
-		}
-		else // render the rest as usual
-		{
-			entity->render();
-		}
+		entity->render();
 	}
 
 	glPopMatrix();
