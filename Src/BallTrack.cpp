@@ -40,8 +40,11 @@ static int oldTime;
 static bool updatePhysic = true;
 
 static PhysicEntity* bille = nullptr;
-static const Pos3D DefaultCameraPos = Pos3D(1500.0f, 1000.0f, 500.0f);
-static const Pos3D CameraToBille = Pos3D(0.0f, 0.0f, -500.0f);
+static const Pos3D DefaultCameraPos(1500.0f, 1000.0f, 500.0f);
+static const Pos3D CameraToBille(0.0f, 0.0f, -500.0f);
+
+static const Pos3D StartPosition(0.0f, 40.9f, 8.f);
+static const float RestartY = 0.f;
 
 //60 FPS
 static const unsigned int TARGET_UPDATE_FPMS = 16;
@@ -278,6 +281,11 @@ static void updateEntities(int)
 			}
 		}
 
+		if (bille != nullptr && bille->getPosition().y < RestartY)
+		{
+			bille->setPosition(StartPosition);
+		}
+
 		glutPostRedisplay();
 	}
 
@@ -357,7 +365,7 @@ int main(int argc, char** argv)
 	{
 		auto sphere = ObjLoader::loadEntity("../data/BallTrack/models/", "sphere");
 		assert(sphere.get());
-		sphere->setPosition(Pos3D(0.0f, 40.9f, 8.f));
+		sphere->setPosition(StartPosition);
 		sphere->setScale(Sc3D(1.f));
 		bille = sphere.get();
 		allEntities.push_back(std::move(sphere));
