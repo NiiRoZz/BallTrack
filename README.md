@@ -32,3 +32,14 @@ Pour compiler le projet, il faut ajouter le dossier Src dans le "include directo
 Et il faut copier le dossier data a la racine du projet.
 
 Notre circuit est minimaliste car on s'est concentré sur le reste avant de créer le circuit.
+
+Dans le dossier blender se trouve un script, qui permet d'extraire les informations d'un objet pour notre projet.
+
+Nous avons créé notre propre type de fichier, avec une extension .bt.
+Cela nous permet de définir la texture sur notre objet, mais aussi les primitives de collisions liées à cet objet.
+
+Nous allons décrire comment une primitive est définie dans notre fichier:
+type posx posy posz rotx roty rotz scalex scaley scalez
+
+type est forcément soit "rectangle", soit "sphere".
+
