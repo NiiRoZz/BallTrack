@@ -24,8 +24,6 @@ using namespace BallTrack;
 
 std::vector<std::unique_ptr<Entity>> allEntities;
 
-float scale = 1.f;
-
 bool pMode = true;
 bool cameraMode = false;
 bool showPrimitives = true;
@@ -152,37 +150,26 @@ static void keyboard(unsigned char key, int, int)
 	case 'z':
 	{
 		pMode = !pMode;
-		glutSetWindow(f1);
+
+		int currWindow = glutGetWindow();
 		glutPostRedisplay();
-		glutSetWindow(f2);
+		glutSetWindow((currWindow == f1) ? f2 : f1);
 		glutPostRedisplay();
+		glutSetWindow(currWindow);
 	}
 	break;
 
 	case 'a':
 	{
 		showPrimitives = !showPrimitives;
-		glutSetWindow(f1);
+
+		int currWindow = glutGetWindow();
 		glutPostRedisplay();
-		glutSetWindow(f2);
+		glutSetWindow((currWindow == f1) ? f2 : f1);
 		glutPostRedisplay();
+		glutSetWindow(currWindow);
 	}
 	break;
-
-	case 'o':
-	{
-		scale -= 0.1f;
-		glutPostRedisplay();
-	}
-	break;
-
-	case 'p':
-	{
-		scale += 0.1f;
-		glutPostRedisplay();
-	}
-	break;
-
 	}
 
 }
@@ -215,12 +202,16 @@ static void special(int specialKey, int, int) {
 		glutPostRedisplay();
 		break;
 	case GLUT_KEY_F3:
+	{
 		cameraMode = !cameraMode;
-		glutSetWindow(f1);
+		
+		int currWindow = glutGetWindow();
 		glutPostRedisplay();
-		glutSetWindow(f2);
+		glutSetWindow((currWindow == f1) ? f2 : f1);
 		glutPostRedisplay();
+		glutSetWindow(currWindow);
 		break;
+	}
 	}
 }
 
@@ -351,7 +342,7 @@ int main(int argc, char** argv)
 	{
 		auto sphere = ObjLoader::loadEntity("../data/BallTrack/models/", "sphere");
 		assert(sphere.get());
-		sphere->setPosition(Pos3D(0.0f, 10.9f, -5.f));
+		sphere->setPosition(Pos3D(0.0f, 40.9f, 8.f));
 		sphere->setScale(Sc3D(1.f));
 		bille = sphere.get();
 		allEntities.push_back(std::move(sphere));
