@@ -1,4 +1,5 @@
 import bpy
+import math
 
 file = open("data_out.txt", 'w')
 for every_object in bpy.context.scene.objects:
@@ -6,14 +7,14 @@ for every_object in bpy.context.scene.objects:
     loc = every_object.location
     rot = every_object.rotation_euler
     sca = every_object.scale
+    name = ""
     if every_object.data.name.startswith("Cube"):
-        name="rectangle"
-        file.write(str(name) +' '+str(loc.x)+' '+str(loc.y)+' '+str(loc.z)+' '+ str(rot.x) + ' '+str(rot.y)+ ' '+str(rot.z)+' '+ str(sca.x) + ' '+str(sca.y)+ ' '+str(sca.z)+ '\n' ) 
+        name="rectangle"  
 
     if every_object.data.name.startswith("Sphere"):
         name="sphere"
-        file.write(str(name) +' '+str(loc.x)+' '+str(loc.y)+' '+str(loc.z)+' '+ str(rot.x) + ' '+str(rot.y)+ ' '+str(rot.z)+' '+ str(sca.x) + ' '+str(sca.y)+ ' '+str(sca.z)+ '\n' ) 
+
+    if name != "":
+        file.write(str(name) +' '+str(loc.x)+' '+str(loc.y * -1)+' '+str(loc.z)+' '+ str(math.degrees(rot.x)) + ' '+str(math.degrees(rot.y))+ ' '+str(math.degrees(rot.z))+' '+ str(abs(sca.x)) + ' '+str(abs(sca.y))+ ' '+str(abs(sca.z))+ '\n' ) 
 
 file.close()
-
-

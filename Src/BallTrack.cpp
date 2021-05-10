@@ -331,22 +331,13 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 	glutTimerFunc(TARGET_UPDATE_FPMS, updateEntities, 1);
 
-	{
+	/*{
 		auto cube = ObjLoader::loadEntity("../data/BallTrack/models/", "cube");
 		assert(cube.get());
 		cube->setPosition(Pos3D(0.0f, 0.f, 0.f));
-		cube->setScale(Sc3D(3.f, 1.f, 3.f));
+		cube->setScale(Sc3D(10.f, 1.f, 10.f));
 		allEntities.push_back(std::move(cube));
-	}
-
-	{
-		auto cube = ObjLoader::loadEntity("../data/BallTrack/models/", "cube");
-		assert(cube.get());
-		cube->setPosition(Pos3D(0.0f, 0.f, 0.f));
-		cube->setRotation(Rt3D(0.78539816339f, Dir3D(1.0f, 0.f, 0.f)));
-		cube->setScale(Sc3D(2.5f, 1.f, 14.0199999213218689f));
-		allEntities.push_back(std::move(cube));
-	}
+	}*/
 
 	{
 		auto circuit = ObjLoader::loadEntity("../data/BallTrack/models/", "circuit_test_1");
@@ -373,6 +364,8 @@ int main(int argc, char** argv)
 	glutSpecialFunc(special);
 	glutDisplayFunc(display2);
 	glutReshapeFunc(reshape2);
+
+	glutSetWindow(f1);
 
 	glutMainLoop();
 	return 0;

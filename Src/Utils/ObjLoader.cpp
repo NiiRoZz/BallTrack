@@ -96,20 +96,28 @@ namespace BallTrack
 
             if (tokens[0] == "sphere")
             {
+                float angleX = std::stof(tokens[4]) * (M_PI / 180.f);
+                float angleY = std::stof(tokens[5]) * (M_PI / 180.f);
+                float angleZ = std::stof(tokens[6]) * (M_PI / 180.f);
+
                 primitive = CollisionPrimitive::CreateSphere(
                     entity.get(),
-                    Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])),
-                    Rt3D(std::stof(tokens[4]), Dir3D(1.0f, 0.0f, 0.0f)),
+                    Pos3D(std::stof(tokens[1]), std::stof(tokens[3]), std::stof(tokens[2])),
+                    Rt3D(angleZ, Dir3D(0.0f, 1.0f, 0.0f)) * Rt3D(angleY, Dir3D(0.0f, 0.0f, 1.0f)) * Rt3D(angleX, Dir3D(1.0f, 0.0f, 0.0f)),
                     std::max(std::stof(tokens[7]), std::max(std::stof(tokens[8]), std::stof(tokens[9])))
                 );
             }
             else if (tokens[0] == "rectangle")
             {
+                float angleX = std::stof(tokens[4]) * (M_PI / 180.f);
+                float angleY = std::stof(tokens[5]) * (M_PI / 180.f);
+                float angleZ = std::stof(tokens[6]) * (M_PI / 180.f);
+
                 primitive = CollisionPrimitive::CreateRectangle(
                     entity.get(),
-                    Pos3D(std::stof(tokens[1]), std::stof(tokens[2]), std::stof(tokens[3])),
-                    Rt3D(std::stof(tokens[4]), Dir3D(1.0f, 0.0f, 0.0f)),
-                    {std::stof(tokens[7]), std::stof(tokens[8]), std::stof(tokens[9])}
+                    Pos3D(std::stof(tokens[1]), std::stof(tokens[3]), std::stof(tokens[2])),
+                    Rt3D(angleZ, Dir3D(0.0f, 1.0f, 0.0f)) * Rt3D(angleY, Dir3D(0.0f, 0.0f, 1.0f)) * Rt3D(angleX, Dir3D(1.0f, 0.0f, 0.0f)),
+                    {std::stof(tokens[7]) / 2.f, std::stof(tokens[9]) / 2.f, std::stof(tokens[8]) / 2.f}
                 );
             }
 
