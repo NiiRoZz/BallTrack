@@ -43,7 +43,7 @@ namespace BallTrack
     {
         if (isStatic()) return;
 
-        static constexpr float GRAVITY = -20.8f;
+        static constexpr float GRAVITY = -13.8f;
 
         // Add Drag to emulate friction
         m_Acceleration = (m_Velocity * -1.f) * 0.95f;

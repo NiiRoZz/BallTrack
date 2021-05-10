@@ -26,7 +26,7 @@ std::vector<std::unique_ptr<Entity>> allEntities;
 
 bool pMode = true;
 bool cameraMode = false;
-bool showPrimitives = true;
+bool showPrimitives = false;
 
 int f1, f2;
 
@@ -309,11 +309,11 @@ static void display2(void)
 
 	auto stringFullScreen = std::string("'F' to toggle full screen display");
 	auto stringWireFrame = std::string("'Z' to toggle wire frame display : ");
-	stringWireFrame.append((pMode ? "on" : "off"));
+	stringWireFrame.append((!pMode ? "on" : "off"));
 	auto stringPrimitives = std::string("'A' to toggle primitives display : ");
 	stringPrimitives.append((showPrimitives ? "on" : "off"));
 	auto stringCamera = std::string("'F3' to switch camera mode : ");
-	stringCamera.append((cameraMode ? "3rd person" : "1st person"));
+	stringCamera.append((!cameraMode ? "3rd person" : "1st person"));
 	auto stringUpdatePhysic = std::string("'G' to toggle the physic : ");
 	stringUpdatePhysic.append((updatePhysic ? "on" : "off"));
 
